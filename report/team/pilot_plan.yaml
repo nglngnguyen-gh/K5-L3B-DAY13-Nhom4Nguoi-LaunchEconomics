@@ -15,7 +15,11 @@
 # Đánh đổi: 40 nhân viên không đủ lực thống kê cho MDE 5 điểm khi chia theo cụm.
 # Chọn 20 nhân viên mỗi nhóm, cần tối thiểu 299 yêu cầu/nhân viên để có lực cho MDE 6 điểm.
 # Tỉ lệ mở lại 7 ngày hiện tại: 4,25% toàn mẫu (51/1.200); 3,97% trong phạm vi pilot (39/982), đều simulated.
-# Ngưỡng an toàn: chênh lệch nhóm trợ lý so với đối chứng >= 2 điểm phần trăm hoặc trần tuyệt đối 6%.
+# Ngưỡng an toàn: trần tuyệt đối 6%, hoàn trùng, báo "đã hoàn" mà sổ cái không ghi thì tắt ngay ở mọi nấc;
+#   chênh lệch so với đối chứng >= 2 điểm phần trăm chỉ áp dụng từ nấc 10 nhân viên (4 cụm quá ít, dễ lệch do ngẫu nhiên).
+# Ngưỡng chi phí 8.000 đ chỉ tính chi phí biến đổi (token, tool, xem lại, làm lại), chưa cộng 40 triệu cố định:
+#   ở nấc 4 nhân viên, 40 triệu chia cho khoảng 3.375 việc là khoảng 11.900 đ/việc, luật sẽ kích hoạt dù chi phí chạy không đổi.
+#   Chi phí cố định theo dõi riêng ở dòng rủi ro "Khối lượng thấp hơn dự kiến" trong chi_so.md.
 
 pilot:
   owner: "Giám đốc vận hành LogiX-VN"
@@ -24,7 +28,7 @@ pilot:
     unit: "staff"
     control_share: 0.5
     randomized: true
-  rollout: [0.10, 0.25, 0.50] # Mỗi nấc 1 tuần; bật dần cho 4, 10, 20 nhân viên can thiệp, giữ 20 đối chứng đồng thời. Đo chỉ số chính sau nấc 0.50 và đủ 7 ngày theo dõi.
+  rollout: [0.10, 0.25, 0.50] # Bật dần cho 4, 10, 20 nhân viên can thiệp; giữ 20 đối chứng đồng thời. Chỉ đo chỉ số chính ở nấc 0.50: khoảng 37,5 yêu cầu/nhân viên/ngày (1.500/40) nên cần 8 ngày để gom đủ 299 yêu cầu/nhân viên (7 ngày chỉ khoảng 263), sau đó thêm 7 ngày theo dõi mở lại cho yêu cầu cuối cùng.
   primary_metric:
     name: dong_trong_24h_khong_mo_lai_7_ngay
     baseline: 0.70
@@ -39,8 +43,9 @@ pilot:
     spillover_risk: "Có; nhân viên cùng depot có thể chia sẻ cách làm. Phân tầng ngẫu nhiên theo depot, giới hạn quyền agent theo staff_id và ghi log agent_opened."
     predeclared: "Có; chỉ số chính, MDE, ngưỡng an toàn/chi phí/sử dụng, quy tắc dừng và ngày quyết định được chốt trước khi chạy."
   stop_rules:
-    - "NẾU tỷ lệ mở lại 7 ngày của nhóm trợ lý cao hơn đối chứng ít nhất 2 điểm phần trăm hoặc vượt trần 6% tại hai lần kiểm tra an toàn liên tiếp, HOẶC có ít nhất 1 ca hoàn trùng mỗi ngày TRONG 3 ngày liên tiếp, THÌ Giám đốc vận hành tắt trợ lý trong 30 phút KHÔNG THÌ không chuyển sang nấc rollout kế tiếp"
-    - "NẾU chi phí mỗi việc thành công của phạm vi pilot vượt 8.000 đ TRONG 2 tuần liên tiếp THÌ PM trợ lý hoàn phí thu hẹp phạm vi về noi_dia và giới hạn tối đa 2 lần chạy KHÔNG THÌ giữ nấc rollout hiện tại, chỉ mở rộng khi đủ mẫu và các cổng an toàn đạt"
+    - "NẾU ở bất kỳ nấc rollout nào (kể cả nấc 4 nhân viên) tỷ lệ mở lại 7 ngày của nhóm trợ lý vượt trần tuyệt đối 6%, hoặc có ít nhất 1 ca hoàn tiền hai lần cho cùng một yêu cầu, hoặc có ít nhất 1 tin nhắn báo khách đã hoàn mà sổ cái không có bản ghi ok cùng trace_id TRONG bất kỳ lần kiểm tra an toàn hằng ngày nào THÌ Giám đốc vận hành tắt trợ lý trong 30 phút KHÔNG THÌ không được chạy tiếp hay chuyển sang nấc rollout kế tiếp"
+    - "NẾU từ nấc 10 nhân viên trở lên tỷ lệ mở lại 7 ngày của nhóm trợ lý cao hơn nhóm đối chứng ít nhất 2 điểm phần trăm TRONG 2 lần kiểm tra an toàn liên tiếp THÌ Giám đốc vận hành tắt trợ lý trong 30 phút KHÔNG THÌ không chuyển sang nấc rollout kế tiếp (không áp dụng ở nấc 4 nhân viên: chỉ 4 cụm nên lệch 2 điểm do ngẫu nhiên xảy ra khoảng 56/1.000 lần, ở 10 nhân viên còn khoảng 8/1.000)"
+    - "NẾU chi phí mỗi việc thành công của phạm vi pilot, tính token, tool, phút xem lại và phút làm lại, chưa cộng chi phí cố định 40 triệu đ/tháng, vượt 8.000 đ TRONG 2 tuần liên tiếp THÌ PM trợ lý hoàn phí thu hẹp phạm vi về noi_dia và giới hạn tối đa 2 lần chạy KHÔNG THÌ giữ nấc rollout hiện tại, chỉ mở rộng khi đủ mẫu và các cổng an toàn đạt"
     - "NẾU tỷ lệ bỏ qua gợi ý (sua hoặc bo / yêu cầu được xem lại) vượt 40% TRONG 1 tuần THÌ Trưởng nhóm CSKH phỏng vấn 5 nhân viên trong 3 ngày KHÔNG THÌ không chuyển sang nấc rollout kế tiếp"
   interim_looks: "Kiểm tra an toàn hằng ngày; chỉ đánh giá tỷ lệ mở lại trên yêu cầu đã đủ cửa sổ theo dõi 7 ngày, không xem sớm hiệu quả chỉ số chính."
   rollback: "Giám đốc vận hành dùng cờ tắt; hiệu lực trong 30 phút. Yêu cầu đang mở được chuyển sang luồng nhân viên tự xử lý."

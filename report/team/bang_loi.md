@@ -20,7 +20,7 @@ Người gắn nhãn 1: Vũ Ngọc Tùng · Người gắn nhãn 2: Nguyễn Lư
 | 10 | Ngữ cảnh | Ngữ cảnh | Có | Ngữ cảnh |
 | 11 | Giới hạn hệ thống | Giới hạn hệ thống | Có | Giới hạn hệ thống |
 | 12 | Ngầm | Ngầm | Có | Ngầm |
-| 13 | Giới hạn hệ thống | Hệ thống | Không | Hệ thống |
+| 13 | Giới hạn hệ thống | Hệ thống | Không | Giới hạn hệ thống |
 | 14 | Do người dùng | Do người dùng | Có | Do người dùng |
 | 15 | Hệ thống | Hệ thống | Có | Hệ thống |
 | 16 | Ngữ cảnh | Ngữ cảnh | Có | Ngữ cảnh |
@@ -37,7 +37,7 @@ Mỗi ca không trùng một câu. Đồng thuận dưới 80% thì ghi định 
 
 - Ca 8: phân biệt theo khả năng quan sát lúc chạy — lỗi kỹ thuật được ghi nhận ngay là Hệ thống, còn kết quả sai chỉ bị phát hiện sau đó là Ngầm.
 - Ca 9: phân biệt theo nguyên nhân gốc — dữ liệu người dùng cung cấp trực tiếp gây sai là Do người dùng, còn lỗi của trợ lý không bị nhận ra lúc xử lý là Ngầm.
-- Ca 13: phân biệt theo hành vi mong đợi — yêu cầu ngoài phạm vi được thiết kế là Giới hạn hệ thống, còn trục trặc khiến chức năng trong phạm vi không hoạt động là Hệ thống.
+- Ca 13: phân biệt theo hành vi mong đợi — yêu cầu ngoài phạm vi được thiết kế là Giới hạn hệ thống, còn trục trặc khiến chức năng trong phạm vi không hoạt động là Hệ thống. Ca 13 hỏi hoàn phí bảo hiểm của công ty đối tác, ngoài phạm vi trợ lý, nên là Giới hạn hệ thống, kể cả khi trợ lý xử lý giới hạn đó kém (trả lời chung chung, không nói rõ không xử lý được, không chuyển nhân viên); cách xử lý kém thuộc cột khắc phục.
 - Ca 17: phân biệt như ca 8 — có tín hiệu lỗi kỹ thuật tại thời điểm chạy là Hệ thống; chỉ phát hiện kết quả sai qua hậu kiểm là Ngầm.
 
 ## Bảng khắc phục cho 5 ca, mỗi loại một ca

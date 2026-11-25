@@ -1,0 +1,131 @@
+CP1–CP2 · NHÓM 4 NGƯỜI · L3B
+12 slide chính: khoảng 10–12 phút. Slide 13–15 dự phòng.
+Phân vai trình bày gợi ý: Nguyên (1,2,12); Tuấn (3,4,8,9); Sỹ (5,6,7,10); Tùng (11).
+Phân vai này chỉ phục vụ thuyết trình, không thay đổi đóng góp đã ghi trong PHAN_CONG.md.
+
+Lời dẫn dưới đây cũng được nhúng trong Speaker Notes của PowerPoint.
+Chạy demo trong src/: python lab13.py; python -m unittest -v test_lab13.py.
+Các số phụ thuộc vào phút xem lại/làm lại được gắn nhãn simulated.
+Slide được soạn với hỗ trợ của Codex; số liệu xuất trực tiếp từ code lab.
+
+
+
+SLIDE 01
+NGƯỜI TRÌNH BÀY GỢI Ý: Nguyên
+THỜI LƯỢNG: 35 giây
+
+Chúng em trình bày bằng chứng kinh tế ở CP1 và CP2, trước khi bàn quyết định pilot ở các checkpoint sau. Ba điểm chính là chi phí mỗi việc thành công khoảng 4.472 đồng, 92,5% chi phí đến từ thời gian nhân viên và giới hạn hai lần chạy rẻ nhất theo mô hình cả hệ thống. Tất cả các kết quả có dùng phút nhân viên đều là simulated.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 02
+NGƯỜI TRÌNH BÀY GỢI Ý: Nguyên
+THỜI LƯỢNG: 40 giây
+
+Runs là bảng chi tiết mỗi lần chạy, requests là bảng kết quả ở cấp yêu cầu. Một yêu cầu có thể có nhiều lần chạy nên hai bảng có số dòng khác nhau. Giá token tính trên 1.000 token, còn tool tính theo từng lần gọi. Hai cột phút xem lại và làm lại mang đuôi simulated. Các mức giá đều là giả định của lab, không phải báo giá nhà cung cấp. Khi đọc requests, giữ ô trống thành chuỗi bằng keep_default_na=False.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 03
+NGƯỜI TRÌNH BÀY GỢI Ý: Tuấn
+THỜI LƯỢNG: 50 giây
+
+Lần chạy đầu luôn xảy ra; với xác suất sai 0,2 thì mới cần lần chạy thứ hai. Do đó tối đa hai lần có kỳ vọng 1,2 lần. Nếu chạy mãi đến khi đúng, kỳ vọng bằng 1 chia p, tức 1,25. Với k bằng ba, kỳ vọng là 1,24 và xác suất thành công 0,992; chia hai giá trị vẫn bằng 1,25. Đây là giả định lý thuyết xác suất không đổi. Dữ liệu theo loại yêu cầu ở A3 sẽ được kiểm tra riêng, không áp giả định này để khẳng định retry luôn có ích.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 04
+NGƯỜI TRÌNH BÀY GỢI Ý: Tuấn
+THỜI LƯỢNG: 65 giây
+
+Hàm mo_hinh lấy token vào chia 1.000 nhân giá vào, cộng token ra chia 1.000 nhân giá ra, rồi cộng tool. Các lần lỗi vẫn tốn các khoản này. Tiền xem lại bằng 890 phút nhân 2.000, tiền làm lại bằng 1.132 phút nhân 2.000. Tổng 4.373.585 đồng chia 978 việc thành công được khoảng 4.472 đồng. Hoá đơn token và tool chia 1.200 yêu cầu chỉ là 274,7 đồng. Chênh 16,3 lần xuất phát từ thời gian nhân viên và khác mẫu số. Chi phí retry 93.804 đồng là một phần trong token và tool, không cộng thêm lần nữa.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 05
+NGƯỜI TRÌNH BÀY GỢI Ý: Sỹ
+THỜI LƯỢNG: 60 giây
+
+Có hai đại lượng khác nhau. Chi phí mỗi việc trợ lý làm thành công dùng mẫu số 978. Để so cả hệ thống với nhân viên tự làm, đề yêu cầu cộng 12.000 đồng cho mỗi yêu cầu không thành công; có 222 ca như vậy. Tổng hệ thống là 7.037.585 đồng chia 1.200, bằng 5.865 đồng mỗi yêu cầu. Con số này bằng 0,49 lần baseline 12.000 đồng và chưa bao gồm chi phí cố định. Đây là mô hình theo công thức lab, không phải kết quả tài chính đã xác nhận ngoài thực tế.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 06
+NGƯỜI TRÌNH BÀY GỢI Ý: Sỹ
+THỜI LƯỢNG: 60 giây
+
+Tách requests theo loai, rồi mo_hinh tự lọc các lần chạy bằng request_id. Quốc tế có chi phí 22.515 đồng mỗi việc thành công, vượt baseline 12.000 đồng, và thành công chỉ 27,3%. Tỉ lệ ok theo lần thử của quốc tế lần lượt 30%, 11,4%, 2,2%, nên retry có lợi ích hạn chế trên nhóm khó này. Đối tác có điều khoản riêng và chi phí gần ngưỡng, nhóm đề xuất chưa đưa vào pilot. Nội địa và hàng nặng là phạm vi kinh tế ưu tiên để xem xét cùng các bằng chứng an toàn ở checkpoint sau. So sánh theo loại đang là chỉ số chi phí mỗi việc thành công, không bao gồm cố định và toàn bộ phần làm thay.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 07
+NGƯỜI TRÌNH BÀY GỢI Ý: Sỹ
+THỜI LƯỢNG: 50 giây
+
+Trong phạm vi có 982 yêu cầu và 900 thành công. Khi dự báo trên tổng 45.000 yêu cầu của toàn công ty, phải dùng 900 trên 1.200, không dùng 900 trên 982. Khi đó có 33.750 việc thành công trong phạm vi, cố định mỗi việc 1.185 đồng. Cộng biến đổi 3.414 đồng ra 4.599 đồng mỗi việc. Nếu tổng lượng yêu cầu còn 22.500, số thành công còn 16.875, cố định mỗi việc thành 2.370 đồng và tổng 5.784 đồng. Các con số là simulated và chưa cộng phần nhân viên xử lý yêu cầu không thành công.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 08
+NGƯỜI TRÌNH BÀY GỢI Ý: Tuấn
+THỜI LƯỢNG: 70 giây
+
+Chín kịch bản dùng lại mo_hinh, dữ liệu gốc không bị sửa. Làm lại gấp đôi tăng chi phí 51,8%, xem lại gấp đôi tăng 40,7%, lương tăng 25% tăng 23,1%; giá token gấp đôi chỉ tăng 5,6%. Trong bộ kịch bản của đề, ba yếu tố nhạy nhất là làm lại, xem lại, lương. Các mức thay đổi đầu vào không đồng nhất nên đây là xếp hạng trong bộ kịch bản, không phải xếp hạng hệ số co giãn. Vì mô hình tuyến tính, giảm một nửa làm lại làm chi phí giảm 25,9%, bằng nửa mức tăng 51,8% khi gấp đôi. Slide dùng dấu tăng giảm đúng, không dùng ±51,8%.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 09
+NGƯỜI TRÌNH BÀY GỢI Ý: Tuấn
+THỜI LƯỢNG: 40 giây
+
+Khi giá token và hệ số xem lại cùng tăng gấp đôi, chi phí thành 6.543 đồng, tăng khoảng 46,3%. Điều này bằng 5,6 cộng 40,7 điểm phần trăm thay đổi tương đối so với cùng giá gốc, sau làm tròn. Lý do là hai khoản nằm ở hai số hạng riêng của tổng, mẫu số 978 không đổi. Kết luận tính cộng chỉ áp dụng trong mô hình này. Nếu việc xem lại ảnh hưởng đến xác suất thành công hoặc khối lượng làm lại, cần mô hình khác để đánh giá tương tác.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 10
+NGƯỜI TRÌNH BÀY GỢI Ý: Sỹ
+THỜI LƯỢNG: 70 giây
+
+Một lần chạy có chi phí mỗi việc thành công thấp nhất 4.111 đồng nhưng để lại 319 yêu cầu không thành công. Hai lần có 234 ca không thành công và tổng hệ thống 6.901.220 đồng, rẻ nhất trong ba giới hạn. Ba lần có 222 ca không thành công nhưng chi phí trợ lý cao hơn, tổng 7.037.585 đồng. Chọn một lần thay vì hai lần đẩy thêm 85 yêu cầu sang nhân viên và tốn thêm khoảng 548.561 đồng theo mô hình. Vì vậy không tối ưu một chỉ số đơn lẻ mà phải tính cả phần việc để lại cho nhân viên. Bộ số này tính trên toàn bộ 1.200 yêu cầu; khi chốt pilot trong phạm vi hẹp cần kiểm lại kịch bản ở đúng phạm vi.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 11
+NGƯỜI TRÌNH BÀY GỢI Ý: Tùng
+THỜI LƯỢNG: 65 giây
+
+Mỗi yêu cầu có ít nhất một lần ok chỉ được đếm một lần để xem lại; có 948 yêu cầu, không phải 948 lần chạy. Tiền xem lại là 948 nhân 5 phút nhân 2.000, bằng 9.480.000 đồng. Có 48 ca làm lại. Với giả định 9 phút, cộng token và tool được 10.568.513 đồng; chia 900 thành công ra 11.743 đồng. Thay 9 phút bằng trung bình simulated toàn mẫu 15,2973 phút, kết quả làm tròn là 12.415 đồng. Các ngưỡng hoà vốn chỉ theo phạm vi chi phí B4, chưa có cố định và phần nhân viên làm thay. Vì vậy pilot cần đo thời gian thực tế và xem có thể giảm xem lại đến đâu mà vẫn an toàn.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 12
+NGƯỜI TRÌNH BÀY GỢI Ý: Nguyên
+THỜI LƯỢNG: 45 giây
+
+Bằng chứng kinh tế đề xuất thu hẹp phạm vi, kiểm soát retry và đo thời gian nhân viên. Chúng em chưa dùng riêng CP1 và CP2 để kết luận quyết định Go; còn cần bảng lỗi, thiết kế pilot và luật dừng. Demo từ thư mục src bằng python lab13.py để thấy ba phép thử đạt và các bảng; chạy unittest để thấy 10 ca kiểm tra hồi quy đạt. Các kiểm tra bao gồm cộng tiền lần lỗi, không cộng trùng retry, giữ nguyên dữ liệu gốc và chọn đúng mẫu số. Sau đó chuyển sang các checkpoint còn lại của nhóm.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 13
+NGƯỜI TRÌNH BÀY GỢI Ý: Tuấn hoặc Sỹ
+THỜI LƯỢNG: 0 giây
+
+Slide dự phòng. Tổng không cộng thêm dòng retry vì đây là một tập con của token và tool. Tiền xem lại và làm lại có nguồn từ hai cột phút simulated. Toàn bộ tập dữ liệu cũng là giả lập, còn nhãn simulated chỉ rõ phần kết quả phụ thuộc vào các phút giả định. Các số hiển thị làm tròn tới đồng, mọi phép tính trong code giữ độ chính xác trước khi làm tròn.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 14
+NGƯỜI TRÌNH BÀY GỢI Ý: Sỹ hoặc Tùng
+THỜI LƯỢNG: 0 giây
+
+Dự phòng để trả lời cách tính B3 và B4. Với B3, mỗi tổng hệ thống là tổng trợ lý cộng 12.000 đồng nhân số ca không thành công. Với B4, chi phí xem lại và làm lại được thay theo giả định mới, không cộng thêm vào số phút cũ. Đếm unique request_id có ok để một yêu cầu không bị xem lại nhiều lần do retry.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
+
+SLIDE 15
+NGƯỜI TRÌNH BÀY GỢI Ý: Cả nhóm
+THỜI LƯỢNG: 0 giây
+
+Dự phòng hỏi đáp. Nếu hỏi vì sao đối tác chi phí dưới baseline vẫn chưa đưa vào pilot: chi phí gần ngưỡng và có điều khoản riêng, cần đánh giá thêm độ an toàn, phạm vi và chi phí cố định. Nếu hỏi công cụ AI: nhóm có khai báo trong báo cáo cá nhân; các số trong slide được xuất trực tiếp từ code và dữ liệu lab, không dùng số do AI tự suy đoán. Phân vai thuyết trình trong bộ slide là gợi ý; không thay đổi phân công đóng góp trong PHAN_CONG.md.
+
+Nguồn: src/lab13.py; src/logix_runs.csv; src/logix_requests.csv; report/team/bang_chi_phi.md; docs/du_lieu_va_cong_thuc.md. Commit dữ liệu gốc: 8c47719.
