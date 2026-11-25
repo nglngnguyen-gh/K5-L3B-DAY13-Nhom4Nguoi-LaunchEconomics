@@ -4,7 +4,7 @@
 
 - Họ tên: Nguyễn Lương Nguyên (nhóm trưởng)
 - MSSV: 2A202604005
-- Email:
+- Email: 26ai.nguyennl@vinuni.edu.vn
 - Vai trong nhóm: người gắn nhãn 2 kiêm giữ hồ sơ
 
 ## 2. Phần việc phụ trách
@@ -32,7 +32,9 @@ Commit, file, bảng hoặc con số do bạn làm.
 - `ff283f7` chore: điền thông tin nhóm và khung hồ sơ launch v0 (PR #1)
 - `965bb5d` docs: thêm bảng phân công `PHAN_CONG.md` (PR #1)
 - `d974b54` feat(cp3): thêm bộ nhãn độc lập của người gắn nhãn 2 (PR #3)
-- Commit điền hồ sơ bảy mục, đề xuất cuối và sửa luật dừng `pilot_plan.yaml`: bổ sung mã commit sau khi merge.
+- `9c7d08d` docs(cp5): hoàn thiện hồ sơ launch v0, sửa luật dừng và báo cáo cá nhân (PR #9)
+- `404463b` docs(team): sửa link báo cáo cá nhân của Sỹ theo tên file mới (PR #9)
+- Commit viết `group_report.md` (PR #10)
 - Cột "Nhãn người 2" trong `report/team/bang_loi.md`; toàn bộ `report/team/ho_so_launch_v0.md`.
 
 ## 5. Công cụ AI đã dùng
