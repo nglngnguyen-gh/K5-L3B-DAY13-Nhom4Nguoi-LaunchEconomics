@@ -13,7 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Nguyễn Lương Nguyên (nhóm trưởng) | 2A202604005 | 26ai.nguyennl@vinuni.edu.vn | nglngnguyen-gh | Người gắn nhãn 2, kiêm giữ hồ sơ |
 |   2 | Nguyễn Văn Tuấn | 2A202604121 | tuantaicon2005@gmail.com | tuannguyen-cell | Người viết code (CP1–CP2) → Người kiểm số (CP4–CP5) |
-|   3 | Bùi Thái Sỹ | 2A202604002 |       | sybui2004 | Người kiểm số (CP1–CP2) → Người viết code (CP4–CP5) |
+|   3 | Bùi Thái Sỹ | 2A202604002 |    26ai.sybt@vinuni.edu.vn   | sybui2004 | Người kiểm số (CP1–CP2) → Người viết code (CP4–CP5) |
 |   4 | Vũ Ngọc Tùng | 2A202604106 | vungoctung098@gmail.com      | TungVN-2911 | Người gắn nhãn 1 |
 
 Bốn vai của lab:
@@ -36,20 +36,6 @@ report/team/MSSV_HoTen.md
 Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 Sao chép mục dưới đây cho từng thành viên.
-
-## HoVaTen-MSSV
-
-### Phần việc phụ trách
-
--
-
-### Đóng góp cụ thể
-
--
-
-### Bằng chứng
-
--
 
 ## Bùi Thái Sỹ · 2A202604002
 
