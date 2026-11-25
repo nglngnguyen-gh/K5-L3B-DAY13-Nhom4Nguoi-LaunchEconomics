@@ -158,12 +158,97 @@ def in_nhiem_vu_a(runs, reqs):
     print('A4 phân bổ cố định trên số việc thành công; chưa cộng phần nhân viên xử lý các yêu cầu không thành công.')
 
 
+def do_nhay(runs, reqs):
+    """B1: mỗi kịch bản khởi đầu từ cùng dữ liệu gốc, chỉ đổi một yếu tố."""
+    kich_ban = {
+        'Giá token gấp đôi': dict(gia_vao=52, gia_ra=260),
+        'Giá token giảm một nửa': dict(gia_vao=13, gia_ra=65),
+        'Xem lại gấp đôi': dict(he_so_xem_lai=2),
+        'Xem lại giảm một nửa': dict(he_so_xem_lai=.5),
+        'Làm lại gấp đôi': dict(he_so_lam_lai=2),
+        'Làm lại giảm một nửa': dict(he_so_lam_lai=.5),
+        'Lương tăng 25%': dict(luong_phut=2500),
+        'Tối đa 2 lần chạy': dict(max_lan_chay=2),
+        'Chỉ 1 lần chạy': dict(max_lan_chay=1),
+    }
+    return {ten: mo_hinh(runs, reqs, **tham_so) for ten, tham_so in kich_ban.items()}
+
+
+def xem_lai_toan_bo(runs, reqs, phut_lam_lai=9, phut_xem_lai=5):
+    """B4: chỉ noi_dia + hang_nang; một yêu cầu có ok được xem lại đúng một lần.
+
+    Chi phí mỗi việc thành công giữ mẫu số ket_qua == thanh_cong của đề.
+    Thay thế tiền xem lại/làm lại cũ bằng giả định B4, không cộng chồng.
+    """
+    pham_vi = reqs[reqs['loai'].isin(['noi_dia', 'hang_nang'])]
+    runs_pv = runs[runs['request_id'].isin(pham_vi['request_id'])]
+    co_ok = runs_pv.loc[runs_pv['status'] == 'ok', 'request_id'].nunique()
+    so_ca_lam_lai = int(pham_vi['ket_qua'].eq('lam_lai').sum())
+    goc = mo_hinh(runs, pham_vi)
+    xem_lai = co_ok * phut_xem_lai * LUONG_PHUT
+    lam_lai = so_ca_lam_lai * phut_lam_lai * LUONG_PHUT
+    tong = goc['token'] + goc['tool'] + xem_lai + lam_lai
+    return dict(
+        yeu_cau=len(pham_vi), co_ok=co_ok, so_ca_lam_lai=so_ca_lam_lai,
+        thanh_cong=goc['thanh_cong'], token_tool=goc['token'] + goc['tool'],
+        xem_lai=xem_lai, lam_lai=lam_lai, tong=tong,
+        cps=tong / goc['thanh_cong'],
+        phut_xem_lai_hoa_von=(BASELINE * goc['thanh_cong'] - goc['token'] - goc['tool'] - lam_lai) / (co_ok * LUONG_PHUT),
+    )
+
+
+def in_nhiem_vu_b(runs, reqs):
+    goc = mo_hinh(runs, reqs)
+    kich_ban = do_nhay(runs, reqs)
+    in_bang('B1 · Chín kịch bản độ nhạy (simulated)',
+            ['Kịch bản', 'Chi phí/việc thành công (đ)', 'Thay đổi (%)'],
+            [[ten, so(kq['cps']), so(100 * (kq['cps'] / goc['cps'] - 1), 1)]
+             for ten, kq in kich_ban.items()])
+
+    cap = mo_hinh(runs, reqs, gia_vao=52, gia_ra=260, he_so_xem_lai=2)
+    print(f"\nB2 · Token + xem lại cùng gấp đôi: {so(cap['cps'])} đ/việc, +{so(100 * (cap['cps'] / goc['cps'] - 1), 1)}% [simulated].")
+    print('Hai tác động cộng được vì tổng chi phí tuyến tính và mẫu số không đổi.')
+    xep_hang = sorted(((ten, kich_ban[ten]['cps'] - goc['cps']) for ten in
+                      ['Giá token gấp đôi', 'Xem lại gấp đôi', 'Làm lại gấp đôi', 'Lương tăng 25%']),
+                     key=lambda dong: dong[1], reverse=True)
+    print('Ba yếu tố nhạy nhất: ' + ' > '.join(ten for ten, _ in xep_hang[:3]) + ' [simulated].')
+
+    dong = []
+    he_thong_theo_k = {}
+    cps_theo_k = {}
+    for k in [1, 2, 3]:
+        kq = mo_hinh(runs, reqs, max_lan_chay=k)
+        khong_thanh_cong = len(reqs) - kq['thanh_cong']
+        he_thong_theo_k[k] = kq['tong'] + BASELINE * khong_thanh_cong
+        cps_theo_k[k] = kq['cps']
+        dong.append([k, so(kq['tong']), khong_thanh_cong, so(he_thong_theo_k[k]), so(kq['cps'])])
+    in_bang('B3 · Cả hệ thống = trợ lý + 12.000 đ × số yêu cầu không thành công (simulated; chưa có cố định)',
+            ['Giới hạn', 'Tổng trợ lý (đ)', 'Không thành công', 'Cả hệ thống (đ)', 'Chi phí/việc thành công (đ)'], dong)
+    print(f'Rẻ nhất cho công ty: {min(he_thong_theo_k, key=he_thong_theo_k.get)} lần; chi phí/việc thành công thấp nhất: {min(cps_theo_k, key=cps_theo_k.get)} lần [simulated].')
+
+    # Độ nhạy theo dữ liệu dùng trung bình mọi ca lam_lai trên toàn mẫu, như hướng dẫn.
+    phut_gia_lap_trung_binh = reqs.loc[reqs['ket_qua'] == 'lam_lai', 'phut_lam_lai_simulated'].mean()
+    dong = []
+    for phut in [9, phut_gia_lap_trung_binh]:
+        kq = xem_lai_toan_bo(runs, reqs, phut_lam_lai=phut)
+        dong.append([so(phut, 4), kq['yeu_cau'], kq['co_ok'], kq['so_ca_lam_lai'],
+                     so(kq['token_tool']), so(kq['xem_lai']), so(kq['lam_lai']),
+                     so(kq['tong']), kq['thanh_cong'], so(kq['cps']),
+                     f"{so(kq['cps'] / BASELINE, 2)}×", so(kq['phut_xem_lai_hoa_von'], 2)])
+    in_bang('B4 · Xem lại 100% câu trả lời có ok, mỗi yêu cầu 5 phút (simulated)',
+            ['Phút làm lại/ca', 'Yêu cầu', 'Có ok', 'Ca làm lại', 'Token + tool (đ)',
+             'Xem lại (đ)', 'Làm lại (đ)', 'Tổng (đ)', 'Thành công', 'Chi phí/việc (đ)',
+             'So với 12.000 đ', 'Phút xem lại hoà vốn'], dong)
+    print('Dòng độ nhạy giữ nguyên trung bình phút simulated chưa làm tròn khi tính; tài liệu làm tròn thành 15,3 phút.')
+    print('B4 chưa có cố định và phần nhân viên xử lý yêu cầu không thành công; pilot cần đo phút thực và học mức xem lại có thể giảm an toàn.')
+
+
 if __name__ == '__main__':
     runs = pd.read_csv('logix_runs.csv')
     reqs = pd.read_csv('logix_requests.csv', keep_default_na=False)
     kiem_tra_dap_an_biet_truoc()
     in_nhiem_vu_a(runs, reqs)
-    # TODO CP2 · Nhiệm vụ B: đổi từng yếu tố, ghi vào bảng độ nhạy.
+    in_nhiem_vu_b(runs, reqs)
     # TODO CP4 · Nhiệm vụ D: cỡ mẫu.
     #   from statsmodels.stats.proportion import proportion_effectsize
     #   from statsmodels.stats.power import NormalIndPower

@@ -71,5 +71,53 @@ class ChiPhiTests(unittest.TestCase):
                 self.assertAlmostEqual(sum(group[key] for group in groups), base[key])
 
 
+class DoNhayTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.runs = pd.read_csv('logix_runs.csv')
+        cls.reqs = pd.read_csv('logix_requests.csv', keep_default_na=False)
+
+    def test_half_double_symmetry_and_paired_additivity(self):
+        base = lab13.mo_hinh(self.runs, self.reqs)['cps']
+        scenarios = lab13.do_nhay(self.runs, self.reqs)
+        self.assertEqual(len(scenarios), 9)
+        for label in ('Giá token', 'Xem lại', 'Làm lại'):
+            increase = scenarios[f'{label} gấp đôi']['cps'] - base
+            decrease = base - scenarios[f'{label} giảm một nửa']['cps']
+            self.assertAlmostEqual(increase, decrease * 2)
+        pair = lab13.mo_hinh(self.runs, self.reqs, gia_vao=52, gia_ra=260, he_so_xem_lai=2)
+        self.assertAlmostEqual(pair['cps'] - base, scenarios['Giá token gấp đôi']['cps']
+                               + scenarios['Xem lại gấp đôi']['cps'] - 2 * base)
+
+    def test_retry_limit_system_cost_reference_and_no_cross_scenario_mutation(self):
+        before = self.reqs.copy(deep=True)
+        expected = [(1, 881, 7449781), (2, 966, 6901220), (3, 978, 7037585)]
+        for limit, successes, system_cost in expected:
+            with self.subTest(limit=limit):
+                actual = lab13.mo_hinh(self.runs, self.reqs, max_lan_chay=limit)
+                self.assertEqual(actual['thanh_cong'], successes)
+                total = actual['tong'] + 12000 * (1200 - actual['thanh_cong'])
+                self.assertAlmostEqual(total, system_cost, delta=1)
+        assert_frame_equal(self.reqs, before)
+
+    def test_b4_replaces_review_costs_and_counts_unique_requests(self):
+        actual = lab13.xem_lai_toan_bo(self.runs, self.reqs)
+        self.assertEqual((actual['yeu_cau'], actual['co_ok'], actual['so_ca_lam_lai'], actual['thanh_cong']),
+                         (982, 948, 48, 900))
+        self.assertEqual(actual['xem_lai'], 9480000)
+        self.assertEqual(actual['lam_lai'], 864000)
+        self.assertAlmostEqual(actual['cps'], 11743, delta=1)
+        self.assertAlmostEqual(actual['phut_xem_lai_hoa_von'], 5.12, delta=.01)
+        # Lặp một dòng ok chỉ tăng token/tool, không tăng số yêu cầu phải xem lại.
+        ok = self.runs[(self.runs['status'] == 'ok') & self.runs['request_id'].isin(
+            self.reqs.loc[self.reqs['loai'].isin(['noi_dia', 'hang_nang']), 'request_id'])].iloc[:1]
+        duplicated = lab13.xem_lai_toan_bo(pd.concat([self.runs, ok], ignore_index=True), self.reqs)
+        self.assertEqual(duplicated['co_ok'], actual['co_ok'])
+        self.assertEqual(duplicated['xem_lai'], actual['xem_lai'])
+        sensitivity = lab13.xem_lai_toan_bo(self.runs, self.reqs, phut_lam_lai=15.3)
+        self.assertGreater(sensitivity['cps'], 12000)
+        self.assertAlmostEqual(sensitivity['cps'], 12414, delta=1)
+
+
 if __name__ == '__main__':
     unittest.main()

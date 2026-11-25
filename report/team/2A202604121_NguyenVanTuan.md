@@ -24,11 +24,21 @@
 - In A1, A2 đủ 9 dòng, A3 đủ 4 loại và tỉ lệ ok theo từng lần thử; A4 phân bổ 40 triệu đ trên 33.750 hoặc 16.875 việc thành công/tháng.
 - Phần chạy lại là tập con của token/tool, không cộng hai lần. Phân biệt chi phí mỗi việc thành công và chi phí cả hệ thống/yêu cầu khi so với 12.000 đ.
 
+### CP2 · Code B1–B4
+
+- B1 in đủ 9 kịch bản, B2 tính cặp token + xem lại và xếp hạng theo tác động chi phí; kiểm tra tính đối xứng giảm nửa/gấp đôi và tính cộng của hai tác động.
+- B3 cho chi phí hệ thống lần lượt 7.449.781 / 6.901.220 / 7.037.585 đ khi giới hạn 1 / 2 / 3 lần [simulated]. Giới hạn 2 rẻ nhất cho công ty; giới hạn 1 có chi phí mỗi việc thành công thấp nhất.
+- B4 đếm 948 yêu cầu có ít nhất một lần ok trong 982 yêu cầu thuộc phạm vi; 48 ca làm lại, 900 việc thành công. Thay tiền xem lại/làm lại cũ bằng giả định 5 phút và 9 phút.
+- B4 cho 11.743 đ/việc thành công; dùng trung bình 15,2973 phút làm lại từ cột simulated toàn mẫu thì được 12.415 đ [simulated, chưa có cố định/phần nhân viên xử lý yêu cầu không thành công].
+- Giữ số chưa làm tròn trong tính toán; tài liệu làm tròn 15,3 phút và ghi 12.414 đ. Chênh khoảng 1 đ với output làm tròn tới đồng, nằm trong dung sai 2%.
+
 ## 4. Bằng chứng
 
 - Chạy từ `src/`: `..\.venv\Scripts\python.exe lab13.py`.
 - CP1: A1 đạt 1,20 · 1,25 · 1,25; A2 cho 978 việc thành công, tổng 4.373.585 đ và 4.472 đ/việc thành công [simulated]; chi phí hệ thống/yêu cầu 5.865 đ [simulated, chưa có cố định].
 - Kiểm tra: `python -m unittest -v test_lab13.py`; gồm ca lỗi vẫn tính tiền, không cộng trùng retry, lọc đúng yêu cầu, không sửa đầu vào và đối chiếu tổng từng loại với toàn bộ CSV.
+- Commit CP1: `0a7a514`; đã push lên nhánh `main` của repo nhóm.
+- CP2: 8 kiểm tra tự động đạt, bao gồm ba giới hạn retry, đối xứng độ nhạy, tính cộng và B4 đếm duy nhất theo yêu cầu.
 - `lab13_starter.py` và hai CSV giữ nguyên. Sỹ phụ trách kiểm tay và điền `bang_chi_phi.md`.
 
 ## 5. Công cụ AI đã dùng
