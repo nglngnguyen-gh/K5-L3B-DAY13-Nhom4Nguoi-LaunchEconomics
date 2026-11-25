@@ -11,6 +11,3 @@ venv/
 example.zip
 example/
 __MACOSX/
-
-# Ghi chú nội bộ nhóm, không nộp
-PHAN_CONG.md
