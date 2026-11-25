@@ -5,7 +5,7 @@
 - Tên nhóm: Nhóm 4 người
 - Lớp: L3B
 - Repo nhóm: `K5-L3B-DAY13-Nhom4Nguoi-LaunchEconomics`
-- URL repo, nhánh nộp, commit chốt:
+- URL repo, nhánh nộp, commit chốt: https://github.com/nglngnguyen-gh/K5-L3B-DAY13-Nhom4Nguoi-LaunchEconomics · nhánh `main` · commit chốt:
 
 ## Thành viên
 
@@ -63,7 +63,7 @@ Sao chép mục dưới đây cho từng thành viên.
 
 - CP4 `8f15aa6`, CP1–CP2 `8753f98`, CP5 `daff0d0`, báo cáo cá nhân `6bb10aa` và `ccafdfa`.
 - Chạy trong `src/`: `python -c "import lab13; lab13.in_d1()"`.
-- Báo cáo cá nhân, bảng kiểm tay và khai báo dùng AI: [202604002_BuiThaiSy.md](report/team/202604002_BuiThaiSy.md).
+- Báo cáo cá nhân, bảng kiểm tay và khai báo dùng AI: [2A202604002_BuiThaiSy.md](report/team/2A202604002_BuiThaiSy.md).
 
 ## Nguyễn Văn Tuấn · 2A202604121
 
@@ -78,3 +78,17 @@ Sao chép mục dưới đây cho từng thành viên.
 - CP1 `0a7a514`, CP2 `5a0cfbd`, CP4 `ed6f315`; CP5 nằm ở commit `feat(cp5): add Tuan metrics, events and individual report`.
 - Chạy trong `src/`: `python lab13.py`, `python -m unittest -v test_lab13.py` (10 kiểm tra), `python kiem_tra_cp4.py`.
 - Báo cáo cá nhân và khai báo dùng AI: [2A202604121_NguyenVanTuan.md](report/team/2A202604121_NguyenVanTuan.md).
+
+## Nguyễn Lương Nguyên · 2A202604005
+
+### Phần việc và đóng góp
+
+- Nhóm trưởng: tạo repo, mời thành viên, chia vai và lịch theo checkpoint (`PHAN_CONG.md`), điền `TEAM.md`, duyệt và merge PR.
+- CP3 (người gắn nhãn 2): gắn nhãn độc lập 20 ca trong `report/team/bang_loi.md`; đồng thuận 16/20 = 80%, thống nhất 4 ca không trùng cùng Tùng.
+- CP4: sửa luật dừng `report/team/pilot_plan.yaml` theo slide chữa D1 (tách luật tắt ngay ở mọi nấc và luật lệch ≥ 2 điểm từ nấc 10 nhân viên; ngưỡng 8.000 đ chưa cộng chi phí cố định; 8 ngày gom đủ 299 yêu cầu/nhân viên).
+- CP5 (giữ hồ sơ): điền đủ bảy mục `report/team/ho_so_launch_v0.md` và đề xuất **Go có điều kiện** cho noi_dia + hang_nang, 4 điều kiện có vai phụ trách và ngày kiểm tra.
+
+### Bằng chứng
+
+- `ff283f7`, `965bb5d` (PR #1), `d974b54` (PR #3); commit hồ sơ và luật dừng bổ sung sau khi merge.
+- Báo cáo cá nhân và khai báo dùng AI: [2A202604005_NguyenLuongNguyen.md](report/team/2A202604005_NguyenLuongNguyen.md).
