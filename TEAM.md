@@ -14,7 +14,7 @@
 |   1 | Nguyễn Lương Nguyên (nhóm trưởng) | 2A202604005 | 26ai.nguyennl@vinuni.edu.vn | nglngnguyen-gh | Người gắn nhãn 2, kiêm giữ hồ sơ |
 |   2 | Nguyễn Văn Tuấn | 2A202604121 | tuantaicon2005@gmail.com | tuannguyen-cell | Người viết code (CP1–CP2) → Người kiểm số (CP4–CP5) |
 |   3 | Bùi Thái Sỹ | 2A202604002 |       | sybui2004 | Người kiểm số (CP1–CP2) → Người viết code (CP4–CP5) |
-|   4 | Vũ Ngọc Tùng | 2A202604106 |       | TungVN-2911 | Người gắn nhãn 1 |
+|   4 | Vũ Ngọc Tùng | 2A202604106 | vungoctung098@gmail.com      | TungVN-2911 | Người gắn nhãn 1 |
 
 Bốn vai của lab:
 
@@ -79,6 +79,19 @@ Sao chép mục dưới đây cho từng thành viên.
 - Chạy trong `src/`: `python lab13.py`, `python -m unittest -v test_lab13.py` (10 kiểm tra), `python kiem_tra_cp4.py`.
 - Báo cáo cá nhân và khai báo dùng AI: [2A202604121_NguyenVanTuan.md](report/team/2A202604121_NguyenVanTuan.md).
 
+## Vũ Ngọc Tùng · 2A202604106
+
+### Phần việc và đóng góp
+
+- CP3: gắn nhãn độc lập bộ 1 cho 20 ca; đối chiếu kết quả đạt đồng thuận 16/20 = 80%, ghi quy tắc phân biệt cho 4 ca bất đồng và hoàn thiện bảng khắc phục 5 loại lỗi trong `report/team/bang_loi.md`.
+- CP4: điền D2, ba nấc rollout, luật dừng an toàn/chi phí/dùng, rollback và ngày quyết định trong `report/team/pilot_plan.yaml`.
+- CP5: rà nhãn `simulated` và kiểm tra hồ sơ không còn từ `production`.
+
+### Bằng chứng
+
+- Commit: `1473dc2`, `947ca5a`, `ecfb109`, `34b7fd8`.
+- YAML parse bằng `yaml.safe_load` đạt; grep không tìm thấy `production` trong `report/team/`.
+- Báo cáo cá nhân và khai báo dùng AI: [2A202604106_VuNgocTung.md](report/team/2A202604106_VuNgocTung.md).
 ## Nguyễn Lương Nguyên · 2A202604005
 
 ### Phần việc và đóng góp
