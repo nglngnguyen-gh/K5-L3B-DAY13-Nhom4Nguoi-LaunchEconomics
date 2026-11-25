@@ -40,7 +40,7 @@ Lệnh `python -c` kiểm tra thư viện phải in ra `san sang`.
 
 | File | Nội dung |
 | --- | --- |
-| `lab13.py` | Bài làm của nhóm: hằng số giá, khung hàm A1, A2 và ba phép thử đáp án biết trước. Chỗ cần viết có dòng `VIẾT Ở ĐÂY` và `TODO CP1`, `TODO CP2`, `TODO CP4` |
+| `lab13.py` | Bài làm của nhóm: mô hình A1–A4, kịch bản B1–B4, cỡ mẫu D1 và chỉ số E1; in các bảng khi chạy từ `src/` |
 | `lab13_starter.py` | Bản gốc của `lab13.py`, giữ nguyên để đối chiếu. Tài liệu trong `docs/` gọi file này là "file khởi đầu" |
 | `logix_runs.csv` | 1.624 lần chạy của agent |
 | `logix_requests.csv` | 1.200 yêu cầu hoàn phí |
@@ -68,6 +68,6 @@ python -m unittest -v test_lab13.py
 python kiem_tra_cp4.py
 ```
 
-`lab13.py` đã in các bảng A1–A4, B1–B4 và ba chỉ số E1; người kiểm số dùng output để điền hồ sơ theo phân công. `tinh_chi_so(reqs)` trả về cả tử số, mẫu số và tỉ lệ để soát mẫu số 177 của chỉ số bỏ qua gợi ý. `kiem_tra_cp4.py` là phép tính D1 độc lập và tỉ lệ mở lại của Tuấn, dùng đối chiếu với phần D1 do Sỹ viết tại `TODO CP4` trong `lab13.py`. Chạy thành công script kiểm số này chưa xác nhận kế hoạch YAML hoặc code D1 của thành viên khác đã hoàn tất.
+`lab13.py` đã in các bảng A1–A4, B1–B4, D1 và ba chỉ số E1; người kiểm số dùng output để điền hồ sơ theo phân công. `tinh_chi_so(reqs)` trả về cả tử số, mẫu số và tỉ lệ để soát mẫu số 177 của chỉ số bỏ qua gợi ý. `kiem_tra_cp4.py` tính D1 độc lập, đối chiếu kết quả với `in_d1()` của Sỹ và tính tỉ lệ mở lại từ CSV. Script kiểm số thành công chưa xác nhận kế hoạch YAML đã hoàn tất.
 
 Trên máy Tuấn, môi trường hiện có đặt tại `../.venv/`; có thể thay `python` bằng `..\.venv\Scripts\python.exe` trong các lệnh trên. Từ PowerShell có thể mở đúng môi trường và thư mục bằng `. D:\Vinuni_AI\.tools\Start-Day13.ps1`.
