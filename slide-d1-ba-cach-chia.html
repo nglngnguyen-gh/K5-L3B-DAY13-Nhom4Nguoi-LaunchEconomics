@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D1 · Cỡ mẫu, ba chỉ số và event của pilot</title>
+<style>
+  :root {
+    --paper: #f6f1e7;
+    --ink: #1c1916;
+    --muted: #5e564c;
+    --card: #fffdf8;
+    --line: #e4d9c8;
+    --clay: #b8431f;
+    --clay-soft: #f8ebe4;
+    --green: #1c6b45;
+    --green-soft: #e6f3ec;
+    --gold: #8a5a12;
+    --gold-soft: #f8f0dc;
+    --shadow: 0 18px 50px rgba(60, 40, 20, .08);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink); }
+  body {
+    font-family: "Be Vietnam Pro", "Segoe UI", sans-serif;
+    font-weight: 420;
+    letter-spacing: -0.01em;
+  }
+  .deck { height: 100%; }
+  .slide {
+    display: none;
+    height: 100%;
+    overflow: auto;
+    padding: 40px 64px 96px;
+  }
+  .slide.on { display: flex; flex-direction: column; }
+  h1, h2, .num {
+    font-family: Literata, "Iowan Old Style", Palatino, serif;
+    font-weight: 620;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+  .kicker {
+    font-size: 13px;
+    font-weight: 640;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--clay);
+    margin-bottom: 14px;
+  }
+  h1 { font-size: 64px; line-height: 1.02; max-width: 16ch; }
+  h2 { font-size: 36px; line-height: 1.15; max-width: 28ch; }
+  .lead { font-size: 22px; line-height: 1.45; color: var(--muted); max-width: 46ch; margin-top: 18px; }
+  .where { font-size: 16px; line-height: 1.4; color: var(--muted); margin: 12px 0 0; max-width: 68ch; }
+  .row { display: flex; gap: 18px; margin-top: 28px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px 22px 20px;
+    box-shadow: var(--shadow);
+  }
+  .grow { flex: 1; }
+  .tag {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 640;
+  }
+  .tag.bad { background: var(--clay-soft); color: var(--clay); }
+  .tag.ok { background: var(--green-soft); color: var(--green); }
+  .tag.warn { background: var(--gold-soft); color: var(--gold); }
+  .num { font-size: 56px; line-height: .95; }
+  .num small { display: block; margin-top: 8px; font-family: "Be Vietnam Pro", sans-serif; font-size: 16px; font-weight: 520; color: var(--muted); letter-spacing: 0; }
+  p { margin: 10px 0 0; font-size: 17px; line-height: 1.45; }
+  .example {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+    color: var(--muted);
+    font-size: 16px;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 22px; background: var(--card); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
+  th, td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--line); font-size: 18px; vertical-align: top; }
+  th { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 640; }
+  tr:last-child td { border-bottom: 0; }
+  .pick { background: #f3faf6; }
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px; background: rgba(246, 241, 231, .92);
+    border-top: 1px solid var(--line); backdrop-filter: blur(8px);
+  }
+  button {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: 8px 14px; font: inherit; font-weight: 640; cursor: pointer;
+  }
+  .dots { display: flex; gap: 8px; }
+  .dots i { width: 8px; height: 8px; border-radius: 99px; background: #d9cbb8; display: block; }
+  .dots i.on { background: var(--clay); width: 22px; }
+  .hint { color: var(--muted); font-size: 13px; }
+  .hero { justify-content: center; }
+  .chips { display: flex; gap: 10px; margin-top: 28px; flex-wrap: wrap; }
+  .chip {
+    background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+    padding: 10px 16px; font-weight: 640;
+  }
+  .formula {
+    font-variant-numeric: tabular-nums;
+    background: var(--ink); color: #f6f1e7; border-radius: 16px; padding: 14px 16px;
+    margin-top: 14px; font-size: 17px; line-height: 1.55;
+  }
+  .formula div { white-space: nowrap; }
+
+  /* Additions preserve the original paper and card palette; work offline. */
+  body { font-family: "Segoe UI", Arial, sans-serif; }
+  h1, h2, .num { font-family: Cambria, Georgia, "Times New Roman", serif; letter-spacing: -.015em; }
+  .slide { padding: 30px 52px 90px; }
+  h1 { font-size: clamp(42px, 4.8vw, 64px); max-width: 19ch; }
+  h2 { font-size: clamp(28px, 3vw, 39px); max-width: 37ch; }
+  .lead { font-size: 21px; }
+  .where { font-size: 15px; max-width: 100ch; }
+  .row { margin-top: 22px; }
+  .row > .card { min-width: 0; }
+  .card { padding: 19px 21px; }
+  p { font-size: 17px; }
+  .formula div { white-space: normal; }
+  .num { font-size: 52px; }
+  .metric { margin-top: 22px; font-size: clamp(33px, 3.5vw, 51px); }
+  .num small { font-family: "Segoe UI", sans-serif; line-height: 1.3; }
+  .table-wrap { overflow-x: auto; }
+  .compact { margin-top: 18px; }
+  .compact th { font-size: 12px; padding: 11px 14px; }
+  .compact td { font-size: 16px; padding: 11px 14px; }
+  .event-table { table-layout: fixed; }
+  .event-table th:first-child { width: 27%; }
+  .event-table th:nth-child(2) { width: 47%; }
+  .event-table td { font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+  .event-table td small { display: block; color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .event-table code { font-size: 13px; font-weight: 640; }
+  .mapping-table td { font-size: 15px; }
+  .source { font-size: 13px; color: var(--muted); margin-top: 15px; }
+  .common-fields { font-size: 14px; line-height: 1.5; }
+  .notice { font-size: 16px; padding: 12px 16px; background: var(--gold-soft); color: var(--gold); border-radius: 12px; margin-top: 20px; }
+  pre { font: 14px/1.6 Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--ink); color: var(--paper); padding: 16px; border-radius: 14px; }
+  code { font-family: Consolas, monospace; font-size: .92em; }
+  .bar { gap: 12px; height: 66px; padding: 0 24px; }
+  .bar .controls { display: flex; align-items: center; gap: 8px; }
+  .bar .count { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .dots { gap: 6px; }
+  .dots button { display: block; padding: 0; border: 0; background: #d9cbb8; width: 8px; height: 8px; min-width: 8px; border-radius: 99px; }
+  .dots button.on { width: 20px; background: var(--clay); }
+  button:focus-visible, a:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+  #speaker-notes { position: fixed; left: 4%; right: 4%; bottom: 79px; max-height: 42vh; overflow: auto; padding: 20px 24px; background: var(--ink); color: var(--paper); border-radius: 16px; box-shadow: 0 8px 45px #0004; z-index: 10; }
+  #speaker-notes p { font-size: 17px; }
+  #speaker-notes[hidden] { display: none; }
+  #notes-label { font-size: 12px; letter-spacing: .1em; color: #e9c9a5; text-transform: uppercase; }
+  .progress { position: fixed; top: 0; left: 0; height: 3px; width: var(--progress, 0%); background: var(--clay); transition: width .15s; }
+  @media (max-width: 900px) {
+    .slide { padding: 24px 24px 90px; }
+    .row { flex-direction: column; gap: 14px; }
+    h1 { font-size: 43px; }
+    h2 { font-size: 30px; }
+    .hero { justify-content: flex-start; padding-top: 60px; }
+    .dots { display: none; }
+    .bar { padding: 0 12px; gap: 6px; }
+    .bar button { padding: 7px 11px; font-size: 13px; }
+    .compact { min-width: 650px; }
+    .num { font-size: 44px; }
+    .metric { font-size: 44px; }
+  }
+  @media print {
+    @page { size: 13.333in 7.5in; margin: 0; }
+    html, body, .deck { height: auto; }
+    .slide, .slide.on { display: flex !important; flex-direction: column; width: 13.333in; height: 7.5in; padding: 25px 40px 30px; overflow: hidden; break-after: page; page-break-after: always; }
+    .slide:last-child { break-after: auto; page-break-after: auto; }
+    .bar, .progress, #speaker-notes { display: none !important; }
+    h1 { font-size: 54px; }
+    h2 { font-size: 32px; }
+    .row { flex-direction: row; margin-top: 18px; }
+    .card { box-shadow: none; }
+    .compact td { padding-top: 9px; padding-bottom: 9px; }
+    .table-wrap { overflow: visible; }
+    * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  }
+
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+<section id="slide-1" data-title="Cỡ mẫu, ba chỉ số và event của pilot." data-notes="Mở đầu: phần này nối kiểm số D1 với ba chỉ số E1 và event. Toàn bộ dữ liệu là giả lập; kết quả từ code của nhóm, không phải số quan sát ngoài thực tế." class="slide hero on">
+  <div class="kicker">Lab 13 · D1 và E1 · Phần trình bày của Tuấn</div>
+  <h1>Cỡ mẫu, ba chỉ số và event của pilot.</h1>
+  <p class="lead">Chọn cách chia đủ mẫu. Tính đúng tử số, mẫu số. Ghi đủ event để kiểm chứng kết quả.</p>
+  <div class="chips">
+    <span class="chip">1 · Từng đơn</span>
+    <span class="chip">2 · Từng nhân viên</span>
+    <span class="chip">3 · Từng kho</span><span class="chip">994/1.200 · 48/177 · 51/1.200</span>
+  </div>
+</section>
+
+<section id="slide-2" data-title="Trợ lý có nâng tỉ lệ đơn xong xuôi từ 70% lên 75% không?" data-notes="D1 giả định baseline 0,70 và mục tiêu 0,75, alpha 0,05, power 0,80, ICC 0,02. Đây là giả định thiết kế, khác với 82,83% mô tả mẫu hiện có. 1.251 là số mỗi nhóm khi giả định độc lập." class="slide">
+  <div class="kicker">Câu hỏi chung</div>
+  <h2>Trợ lý có nâng tỉ lệ đơn xong xuôi từ 70% lên 75% không?</h2>
+  <p class="where">Chỉ số chính: đóng trong 24 giờ và không mở lại trong 7 ngày. Giả định D1: alpha 0,05 · power 0,80 · ICC 0,02.</p><div class="row">
+    <div class="card grow">
+      <div class="num">1.251 <small>đơn mỗi bên</small></div>
+      <p>Cỡ mẫu gốc khi coi các yêu cầu độc lập. Chia theo cụm phải điều chỉnh tương quan; bốc theo yêu cầu vẫn cần kiểm soát ảnh hưởng giữa hai nhóm.</p>
+    </div>
+    <div class="card grow">
+      <div class="tag warn">Vì sao phải kiểm tra tương quan</div>
+      <p>Đơn thật nằm trong tay một nhân viên, và nhân viên đứng trong một kho. Mười đơn của một người không đáng giá bằng mười đơn của mười người.</p>
+      <p class="example">Giống mười bài của một học sinh không bằng mười bài của mười học sinh. Các bài trong cùng một người giống nhau.</p>
+    </div>
+  </div>
+</section>
+
+<section id="slide-3" data-title="Mỗi đơn là một vé riêng." data-notes="Bốc theo từng yêu cầu dễ gom đủ số nhưng có thể tràn tác động khi cùng nhân viên làm cả hai nhánh. Đây là rủi ro cần kiểm soát, không có nghĩa mọi thiết kế theo yêu cầu đều không hợp lệ." class="slide">
+  <div class="kicker">Cách 1 · Chia theo từng yêu cầu</div>
+  <h2>Mỗi đơn là một vé riêng.</h2>
+  <div class="row">
+    <div class="card">
+      <div class="num">1.251</div>
+      <p>Đơn này trợ lý làm. Đơn kế nhân viên tự làm.</p>
+      <p><span class="tag ok">Đủ mẫu cho 5 điểm</span></p>
+    </div>
+    <div class="card grow">
+      <p><span class="tag bad">Rủi ro tràn tác động</span></p>
+      <p>Cùng một nhân viên sáng dùng trợ lý, chiều tự làm. Người đó nhớ câu của trợ lý và mang sang đơn đối chứng. Khi cách làm lan sang nhóm đối chứng, hai bên khó tách tác động. Cần cơ chế giảm tràn và cách phân tích phù hợp.</p>
+      <p class="example">Như vừa cho học sinh xem đáp án bài lẻ, vừa bảo bài kế bên là bài kiểm tra độc lập.</p>
+    </div>
+  </div>
+</section>
+
+<section id="slide-4" data-title="Bốc cả người, không bốc từng đơn." data-notes="m=75 cho DE=2,48; làm tròn lên n=3.103 và 42 nhân viên mỗi bên, tổng 84 vượt 40. Nếu giữ 20 người mỗi bên, không thể đạt cỡ mẫu hiệu dụng 1.251 ở ICC 0,02 chỉ bằng cách thêm đơn." class="slide">
+  <div class="kicker">Cách 2 · Chia theo nhân viên</div>
+  <h2>Bốc cả người, không bốc từng đơn.</h2>
+  <div class="row">
+    <div class="card grow">
+      <div class="tag bad">75 đơn mỗi người</div>
+      <div class="formula">
+        <div>1 + 74 × 0,02 = 2,48</div>
+        <div>ceil(1.251 × 2,48) = 3.103 đơn</div>
+        <div>3.103 / 75 ≈ 42 người</div>
+      </div>
+      <p>Mỗi bên. Hai bên cần khoảng 84 người. Công ty có 40. Không đủ.</p>
+    </div>
+    <div class="card grow">
+      <div class="tag warn">Chốt 20 người mỗi bên</div>
+      <div class="formula">n hiệu dụng &lt; số cụm / 0,02<br>n hiệu dụng &lt; 1.000 &lt; 1.251</div>
+      <p>75 đơn chỉ còn khoảng 605 đơn hiệu dụng. 10.000 đơn cũng chỉ sát 995. Dừng dưới 1.000.</p>
+      <p class="example">Tài khoản can thiệp được dùng trợ lý; đối chứng không được dùng. Vẫn cần giảm việc chia sẻ câu trả lời giữa đồng nghiệp.</p>
+    </div>
+  </div>
+</section>
+
+<section id="slide-5" data-title="Bật một công tắc cho cả depot." data-notes="Theo depot có 6 cụm mỗi bên; cỡ mẫu hiệu dụng nhỏ hơn 300. Ít cụm khiến khác biệt depot dễ chi phối kết quả. Theo tiêu chí của lab, phương án này không đủ." class="slide">
+  <div class="kicker">Cách 3 · Chia theo kho</div>
+  <h2>Bật một công tắc cho cả depot.</h2>
+  <div class="row">
+    <div class="card">
+      <div class="num">300 <small>trần mỗi bên</small></div>
+      <p>n hiệu dụng luôn nhỏ hơn 6 / 0,02 = 300. Không đạt 1.251 cho mức chênh 5 điểm.</p>
+    </div>
+    <div class="card grow">
+      <p><span class="tag bad">Loại</span></p>
+      <p>Sáu kho bật, sáu kho tắt. Chỉ 6 cụm mỗi bên, dưới mốc 20 của lab. Khác biệt giữa các depot dễ chi phối kết quả.</p>
+      <p class="example">Như sáu lớp. Một lớp giỏi là tưởng sách thắng.</p>
+    </div>
+  </div>
+</section>
+
+<section id="slide-6" data-title="Thêm đơn trong cùng một cụm không vượt c / 0,02." data-notes="c là cụm mỗi bên, m là yêu cầu mỗi cụm. n hiệu dụng=cm/[1+(m-1)ICC]. Với ICC dương, khi m tăng n tiến tới c/ICC từ phía dưới, không đạt trần ở m hữu hạn." class="slide">
+  <div class="kicker">Vì sao có trần · cách 2 và cách 3</div>
+  <h2>Thêm đơn trong cùng một cụm không vượt c / 0,02.</h2>
+  <div class="row">
+    <div class="card grow">
+      <div class="tag warn">Công thức</div>
+      <div class="formula">
+        <div>DE = 1 + (m − 1) × 0,02</div>
+        <div>n hiệu dụng = c × m / DE</div>
+        <div>m tăng → n tiến tới c / 0,02<br>Với m hữu hạn: n &lt; c / 0,02</div>
+      </div>
+      <p>c là số cụm mỗi bên. m là số đơn mỗi cụm. m lớn thì DE gần bằng m × 0,02, nên m trên và dưới gần như triệt tiêu.</p>
+    </div>
+    <div class="card grow">
+      <div class="tag bad">20 người và 6 kho</div>
+      <div class="formula">
+        <div>20 người, 75 đơn ≈ 605</div>
+        <div>20 người, 1.000 đơn ≈ 953</div>
+        <div>20 người, 10.000 đơn ≈ 995</div>
+        <div>6 kho → trần 300</div>
+      </div>
+      <p class="example">Mười bài của một học sinh không thành mười bài độc lập. Đơn mới trong cùng người, cùng kho, chỉ mua thêm một ít thông tin.</p>
+    </div>
+  </div>
+</section>
+
+<section id="slide-7" data-title="Đánh đổi giữa tách tác động và đủ cỡ mẫu." data-notes="Chia theo nhân viên giảm việc một người vừa ở can thiệp vừa ở đối chứng, nhưng vẫn cần hạn chế chia sẻ. Lựa chọn 20/20 là phương án hiện có trong YAML, cùng đánh đổi MDE 6 điểm." class="slide">
+  <div class="kicker">Đặt cạnh nhau</div>
+  <h2>Đánh đổi giữa tách tác động và đủ cỡ mẫu.</h2>
+  <table>
+    <thead>
+      <tr><th>Cách chia</th><th>Thấy mức hơn 5 điểm?</th><th>Hai bên có tách nhau?</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Từng đơn</td>
+        <td>Có, 1.251 đơn</td>
+        <td>Kém. Cùng một người vừa dùng vừa không dùng.</td>
+      </tr>
+      <tr class="pick">
+        <td>Từng nhân viên</td>
+        <td>Không với 5 điểm. Có nếu chấp nhận 6 điểm.</td>
+        <td>Tốt hơn nếu giảm chia sẻ giữa nhóm; 20 người mỗi bên, bốc ngẫu nhiên.</td>
+      </tr>
+      <tr>
+        <td>Từng kho</td>
+        <td>Không. Trần 300.</td>
+        <td>Chỉ 6 cụm. Dễ triển khai, khó tin.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="slide-8" data-title="Chia theo nhân viên. Chấp nhận nhìn mức hơn 6 điểm." data-notes="859 hiệu dụng khác 5.980 thô mỗi nhóm. m=299 cho 859,2 hiệu dụng; m=298 chưa đủ. Nếu tác động thật chỉ 5 điểm thì power khoảng 0,6417, không còn 0,80." class="slide">
+  <div class="kicker">Cách được chọn</div>
+  <h2>Chia theo nhân viên. Chấp nhận nhìn mức hơn 6 điểm.</h2>
+  <div class="row">
+    <div class="card grow">
+      <div class="num">299 <small>đơn mỗi người</small></div>
+      <p>20 × 299 = <strong>5.980 yêu cầu thô mỗi bên</strong>; chia DE = 6,96 còn khoảng 859,2 yêu cầu hiệu dụng. Đó là cỡ vừa đủ để thấy mức hơn 6 điểm, không phải 5.</p>
+      <p>Nếu trợ lý thật ra chỉ hơn 5 điểm, cuộc thử chỉ còn khoảng 64% cơ hội nhìn thấy. Phải nói điều này trước khi chạy.</p>
+    </div>
+    <div class="card grow">
+      <div class="tag warn">Điều kiện để đọc kết quả</div>
+      <p>Đủ 20 nhân viên mỗi bên; mỗi người đủ ít nhất 299 yêu cầu <strong>trong phạm vi pilot</strong>.</p>
+      <p>Cả hai bên cần tối thiểu <strong>11.960 yêu cầu thô</strong>. Không dùng 859 làm số yêu cầu thực tế phải thu.</p>
+      <p class="example">859 là lượng thông tin tương đương yêu cầu độc lập. 5.980 mới là số yêu cầu phải gom mỗi bên.</p>
+    </div>
+  </div>
+</section>
+
+<section id="slide-9" data-title="Các kết quả đã khớp code của Sỹ và kiểm số của Tuấn." data-notes="Đọc lần lượt năm câu D1: 1.251; 3.103 và 84 người; trần dưới 1.000; trần dưới 300; 299 yêu cầu/người cho 6 điểm. Script kiểm số đối chiếu bản D1 chính thức của Sỹ với phép tính độc lập của Tuấn." class="slide">
+<div class="kicker">D1 · Năm câu để đối chiếu</div>
+<h2>Các kết quả đã khớp code của Sỹ và kiểm số của Tuấn.</h2>
+
+<div class="table-wrap"><table class="compact">
+<thead><tr><th>Câu</th><th>Cách tính</th><th>Kết quả mỗi bên</th></tr></thead>
+<tbody>
+<tr><td>a · Theo yêu cầu</td><td>70% → 75%, alpha 0,05, power 0,80</td><td><strong>1.251 yêu cầu độc lập</strong></td></tr>
+<tr><td>b · 75 đơn/người</td><td>DE = 1 + 74 × 0,02 = 2,48</td><td>3.103 yêu cầu → 42 người; tổng 84 &gt; 40</td></tr>
+<tr><td>c · 20 người</td><td>n hiệu dụng &lt; 20 / 0,02</td><td>&lt; 1.000; không đủ cho 5 điểm</td></tr>
+<tr><td>d · 6 depot</td><td>n hiệu dụng &lt; 6 / 0,02</td><td>&lt; 300; không đủ</td></tr>
+<tr class="pick"><td>e · Chấp nhận 6 điểm</td><td>20m / (0,98 + 0,02m) ≥ 859</td><td><strong>m ≥ 299; DE = 6,96</strong></td></tr>
+</tbody></table></div>
+<p class="source">Nguồn: <code>lab13.in_d1()</code> và <code>kiem_tra_cp4.py</code>. Power ở tác động thật 5 điểm ≈ 0,6417.</p>
+</section>
+
+<section id="slide-10" data-title="Trong phạm vi pilot, ước tính khoảng 10 ngày gom mẫu." data-notes="10 ngày là dự báo có điều kiện: tỷ trọng 982/1.200 đại diện cho phạm vi pilot và lượng đơn chia đều. Phải kiểm đủ số mỗi người, không chỉ tổng mẫu. Theo dõi 7 ngày của yêu cầu cuối là thời gian bổ sung, không thay cho thời gian gom mẫu." class="slide">
+<div class="kicker">D1 · Gom đủ yêu cầu và theo dõi đủ lâu</div>
+<h2>Trong phạm vi pilot, ước tính khoảng 10 ngày gom mẫu.</h2>
+
+<div class="row">
+ <div class="card grow"><span class="tag warn">Ước tính có điều kiện</span>
+  <div class="formula">1.500 × 982 / 1.200 = 1.227,5 yêu cầu/ngày<br>1.227,5 / 40 = 30,6875 yêu cầu/người/ngày<br>299 / 30,6875 ≈ 9,74 → <strong>10 ngày</strong></div>
+  <p>Giả sử cơ cấu yêu cầu giống mẫu và phân bổ đều cho 40 người, khi đã bật đủ 20 người can thiệp.</p>
+ </div>
+ <div class="card grow"><span class="tag bad">Không hẹn quyết định chỉ theo lịch</span>
+  <p>8 ngày chỉ là phép chia khi dùng toàn bộ 1.500 yêu cầu/ngày. Pilot chỉ nhận <code>noi_dia + hang_nang</code>, chiếm 982/1.200 mẫu.</p>
+  <p>Chờ đủ <strong>299 yêu cầu từng người</strong>, sau đó chờ đủ cửa sổ theo dõi 7 ngày của các yêu cầu cuối. Có thể lâu hơn nếu phân bổ lệch.</p>
+ </div>
+</div>
+<p class="source">Đây là dự báo từ giả định lưu lượng của lab; không phải thời lượng đã được quan sát hay ngày quyết định đã chốt.</p>
+</section>
+
+<section id="slide-11" data-title="Đủ mẫu để so sánh. Đúng chỉ số để trả lời." data-notes="Chuyển từ câu hỏi thiết kế sang đo lường. D1 nói cần bao nhiêu thông tin để so sánh; ba chỉ số định nghĩa loại kết quả mà pilot sẽ ghi nhận." class="slide hero">
+<div class="kicker">Từ D1 sang E1</div>
+<h2>Đủ mẫu để so sánh. Đúng chỉ số để trả lời.</h2>
+<p class="lead">D1 xác định cần gom bao nhiêu yêu cầu. E1 xác định đếm kết quả nào và event nào làm bằng chứng.</p>
+<div class="chips"><span class="chip">Chính · kết quả</span><span class="chip">Dùng · quyết định nhân viên</span><span class="chip">An toàn · mở lại</span></div>
+</section>
+
+<section id="slide-12" data-title="82,83% · 27,12% · 4,25%" data-notes="Chính=994/1.200; dùng=48/177; an toàn=51/1.200. Chỉ số chính khác ket_qua=thanh_cong vì định nghĩa khác. Không có đối chứng trong mẫu nên không kết luận 82,83% là mức tăng do trợ lý tạo ra." class="slide">
+<div class="kicker">E1 · Ba chỉ số trong đợt chạy thử</div>
+<h2>82,83% · 27,12% · 4,25%</h2>
+<p class="where">Nguồn: tinh_chi_so(reqs) trên CSV giả lập. Ba chỉ số không dùng hai cột phút _simulated.</p>
+
+<div class="row grid3">
+ <div class="card grow"><span class="tag ok">Chính</span><div class="num metric">82,83%<small>994 / 1.200 yêu cầu</small></div><p>Đóng trong 24 giờ <strong>và</strong> không mở lại trong 7 ngày.</p><p class="example">Điều kiện đồng thời; không đồng nhất với 978 yêu cầu có <code>ket_qua=thanh_cong</code>.</p></div>
+ <div class="card grow"><span class="tag warn">Dùng</span><div class="num metric">27,12%<small>48 / 177 yêu cầu được xem lại</small></div><p>Nhân viên chọn <code>sua</code> hoặc <code>bo</code> trong những yêu cầu được xem lại.</p><p class="example">Không chia cho toàn bộ 1.200 yêu cầu.</p></div>
+ <div class="card grow"><span class="tag bad">An toàn</span><div class="num metric">4,25%<small>51 / 1.200 yêu cầu</small></div><p>Yêu cầu mở lại trong 7 ngày; là một dấu hiệu lỗi lọt đến khách.</p><p class="example">Phạm vi nội địa + hàng nặng: 39/982 = 3,97%.</p></div>
+</div>
+<p class="notice">Đợt chạy thử không có đối chứng: chưa thể kết luận trợ lý nâng chỉ số từ 70% lên 82,83%.</p>
+</section>
+
+<section id="slide-13" data-title="Mỗi chỉ số giữ đúng tử số và mẫu số." data-notes="Phép AND dùng hai điều kiện đồng thời. Mẫu số 177 là được xem lại, không phải số lần hiện gợi ý. CSV giữ sẵn cờ nhị phân; đo thật cần timestamp và quy tắc cửa sổ đã chốt. Mẫu số 0 không được coi tỷ lệ 0%." class="slide">
+<div class="kicker">E1 · Cách tính có thể chạy lại</div>
+<h2>Mỗi chỉ số giữ đúng tử số và mẫu số.</h2>
+<p class="where">Đọc yêu cầu bằng pd.read_csv(..., keep_default_na=False). Các cờ 24h/7 ngày đã có sẵn trong CSV của lab.</p>
+
+<div class="row">
+ <div class="card grow"><span class="tag ok">Tính trực tiếp từ CSV</span>
+<pre><code>chinh = ((reqs.dong_trong_24h == 1)
+         &amp; (reqs.mo_lai_trong_7_ngay == 0)).mean()
+
+xem = reqs[reqs.duoc_xem_lai == 1]
+bo_qua = xem.quyet_dinh_xem_lai.isin(['sua', 'bo']).mean()
+
+an_toan = reqs.mo_lai_trong_7_ngay.eq(1).mean()</code></pre>
+ </div>
+ <div class="card grow"><span class="tag warn">Quy tắc khi đo pilot thật</span>
+  <p>Đếm theo <code>request_id</code>, không theo 1.624 lần chạy. Một yêu cầu chỉ đóng góp tối đa một lần vào tử số mỗi chỉ số.</p>
+  <p>Mẫu số bằng 0: báo “chưa có dữ liệu”. Yêu cầu chưa đủ 7 ngày theo dõi: chưa được coi là “không mở lại”.</p>
+  <p class="example">Mẫu số 177 tương ứng được xem lại; hiển thị gợi ý đơn thuần chưa phải một quyết định xem lại.</p>
+ </div>
+</div>
+</section>
+
+<section id="slide-14" data-title="Ghi được hành vi, chi phí và phần việc của nhân viên." data-notes="Sáu event đầu thu nhận yêu cầu, mức dùng, mỗi run, gợi ý, quyết định review và làm lại. Các trường chung áp dụng cho tất cả, nên mỗi event đều có trace_id. Phút thực thay cho phút simulated." class="slide">
+<div class="kicker">Event · 1/2 · Từ yêu cầu đến quyết định</div>
+<h2>Ghi được hành vi, chi phí và phần việc của nhân viên.</h2>
+<p class="where">Đây là đặc tả cần triển khai, chưa phải 11 loại log đã có sẵn trong hai CSV. Phút của pilot cần đo thật.</p>
+
+<div class="table-wrap"><table class="event-table compact">
+<thead><tr><th>Event / nơi ghi</th><th>Trường riêng cần có</th><th>Khi nào</th></tr></thead><tbody>
+<tr><td><code>refund_request_created</code><small>Hệ thống ticket</small></td><td>created_at, eligible, eligibility_version, arm, staff_id</td><td>Nhận yêu cầu; ghi cả đối chứng và ca không mở trợ lý</td></tr>
+<tr><td><code>agent_opened</code><small>Giao diện nhân viên</small></td><td>opened_at, staff_id, arm</td><td>Mỗi lần mở trợ lý trên yêu cầu</td></tr>
+<tr><td><code>agent_run_completed</code><small>Agent runtime</small></td><td>run_id, attempt, tokens_in, tokens_out, tool_calls, status, price_version</td><td>Mọi lần chạy, kể cả lỗi</td></tr>
+<tr><td><code>agent_suggestion_shown</code><small>Giao diện nhân viên</small></td><td>suggestion_id, shown_at, so_tien_de_xuat</td><td>Khi gợi ý thực sự hiện ra</td></tr>
+<tr><td><code>staff_review_decision</code><small>Giao diện nhân viên</small></td><td>suggestion_id, decision (giu/sua/bo), is_final, review_started_at, review_ended_at, phut_xem_lai</td><td>Khi xác nhận quyết định xem lại</td></tr>
+<tr><td><code>staff_rework_completed</code><small>Giao diện nhân viên</small></td><td>reason, rework_started_at, rework_ended_at, phut_lam_lai</td><td>Khi hoàn tất làm lại</td></tr>
+</tbody></table></div>
+<p class="source common-fields">Mọi event có: event_id · event_at (UTC) · request_id · <strong>trace_id</strong> · staff_id · depot · loai · arm · assignment_version.</p>
+</section>
+
+<section id="slide-15" data-title="Ghi cả kết quả đúng, lỗi và yêu cầu chuyển nhân viên." data-notes="Năm event còn lại là sổ cái, handoff, đóng, mở lại và hậu kiểm. Đối chứng vẫn cần trace gốc để đo cùng cách. Không đồng nhất thông báo đã hoàn với ghi sổ cái thành công." class="slide">
+<div class="kicker">Event · 2/2 · Từ hoàn tiền đến hậu kiểm</div>
+<h2>Ghi cả kết quả đúng, lỗi và yêu cầu chuyển nhân viên.</h2>
+
+<div class="table-wrap"><table class="event-table compact">
+<thead><tr><th>Event / nơi ghi</th><th>Trường riêng cần có</th><th>Khi nào</th></tr></thead><tbody>
+<tr><td><code>refund_ledger_write</code><small>Dịch vụ sổ cái</small></td><td>ledger_entry_id, idempotency_key, amount_vnd, result, policy_version</td><td>Mỗi lần ghi hoàn tiền, kể cả lỗi</td></tr>
+<tr><td><code>handoff_to_staff</code><small>Agent runtime</small></td><td>reason, summary, staff_id, attempt</td><td>Hết giới hạn chạy hoặc ngoài phạm vi</td></tr>
+<tr><td><code>ticket_closed</code><small>Hệ thống ticket</small></td><td>closed_at, ledger_entry_id, close_reason</td><td>Khi đóng; nối created_at để kiểm 24 giờ</td></tr>
+<tr><td><code>ticket_reopened</code><small>Hệ thống ticket</small></td><td>reopened_at, previous_closed_at, reason</td><td>Mỗi lần mở lại; kiểm cửa sổ 7 ngày đã chốt</td></tr>
+<tr><td><code>audit_sample_checked</code><small>Kế toán độc lập</small></td><td>audit_batch_id, sampling_rule, checked_at, paid_amount_vnd, expected_amount_vnd, policy_version, complete</td><td>Kiểm tra mẫu; ghi cả đơn đúng và sai</td></tr>
+</tbody></table></div>
+<p class="source common-fields">Mọi event có <strong>trace_id</strong> và bộ trường chung ở màn trước. Tạo trace gốc từ lúc nhận yêu cầu, kể cả nhóm đối chứng không chạy agent.</p>
+</section>
+
+<section id="slide-16" data-title="Mỗi chỉ số đều có chuỗi bằng chứng." data-notes="Ánh xạ đủ cả ba chỉ số và hai chỉ số đề xuất. Mức dùng đề xuất là yêu cầu mở trợ lý / đủ điều kiện của can thiệp. An toàn đề xuất là sai tiền / mẫu hậu kiểm đủ bằng chứng. Cả hai chưa đủ cột trong CSV để tính. Khử event trùng bằng event_id, không bỏ retry hợp lệ khỏi chi phí." class="slide">
+<div class="kicker">Event → chỉ số</div>
+<h2>Mỗi chỉ số đều có chuỗi bằng chứng.</h2>
+
+<div class="table-wrap"><table class="compact mapping-table"><thead><tr><th>Chỉ số</th><th>Event dùng để tính</th><th>Đơn vị / mẫu số</th></tr></thead><tbody>
+<tr><td>Đóng 24h, không mở lại 7 ngày</td><td>refund_request_created → ticket_closed → ticket_reopened</td><td>Yêu cầu đủ thời gian theo dõi</td></tr>
+<tr><td>Bỏ qua gợi ý</td><td>agent_suggestion_shown + staff_review_decision</td><td>Quyết định cuối trên yêu cầu được xem lại</td></tr>
+<tr><td>Mở lại 7 ngày</td><td>refund_request_created + ticket_closed + ticket_reopened</td><td>Yêu cầu, không phải số lượt mở lại</td></tr>
+<tr class="pick"><td>Mức dùng (đề xuất)</td><td>refund_request_created + agent_opened</td><td>Yêu cầu đủ điều kiện của nhóm can thiệp</td></tr>
+<tr class="pick"><td>Hoàn sai tiền (đề xuất)</td><td>refund_ledger_write + audit_sample_checked</td><td>Yêu cầu đã hậu kiểm đủ bằng chứng</td></tr>
+</tbody></table></div>
+<p class="notice">Khử bản ghi trùng bằng event_id; đếm chỉ số theo request_id. Chi phí vẫn cộng mọi run_id hợp lệ, kể cả retry.</p>
+<p class="source">Hai chỉ số đề xuất chưa tính được từ CSV: thiếu lượt mở trợ lý, phân bổ nhánh và số tiền đúng độc lập. Hậu kiểm đề xuất: mẫu ngẫu nhiên 100 yêu cầu/tuần.</p>
+</section>
+
+<section id="slide-17" data-title="Giám sát an toàn ở mọi nấc 4 → 10 → 20 người." data-notes="Phần này diễn giải YAML hiện có và chỉ ra đề xuất cần chốt. Không có cơ sở tái tạo 56/1.000 trong file gốc nên không dùng số này. Không tự suy ra chỉ được theo dõi an toàn từ 10 cụm; sự cố nghiêm trọng cần phản ứng ở mọi giai đoạn." class="slide">
+<div class="kicker">D3 · Phụ lục · Diễn giải luật dừng</div>
+<h2>Giám sát an toàn ở mọi nấc 4 → 10 → 20 người.</h2>
+<p class="where">Bản trình bày không tự thay đổi pilot_plan.yaml. Các thay đổi luật dừng phải được nhóm chốt trước khi chạy.</p>
+
+<div class="row">
+ <div class="card grow"><span class="tag warn">Kế hoạch YAML hiện có</span>
+  <p>Mở lại cao hơn đối chứng ≥ 2 điểm phần trăm hoặc vượt 6% tại hai lần kiểm tra liên tiếp.</p>
+  <p>Hoàn trùng: luật hiện tại ghi ít nhất 1 ca/ngày trong 3 ngày liên tiếp. Các ngưỡng cần đủ cửa sổ theo dõi và mẫu số rõ ràng.</p>
+  <p class="example">Mở lại nền: 4,25% toàn mẫu; 3,97% trong phạm vi. Trần 3% sẽ thấp hơn hiện trạng.</p>
+ </div>
+ <div class="card grow"><span class="tag bad">Điểm cần nhóm chốt trước pilot</span>
+  <p>Nấc ít người có số liệu dao động mạnh; không dùng chênh lệch thô để tuyên bố hiệu quả. D1 về chỉ số chính không tự xác nhận độ chính xác của chỉ số an toàn.</p>
+  <p><strong>Đề xuất:</strong> ca hoàn trùng hoặc báo đã hoàn nhưng sổ cái không xác nhận cần xử lý sự cố ngay; cân nhắc sửa điều kiện chờ 3 ngày.</p>
+  <p class="example">Chốt cửa sổ theo dõi, mẫu số tối thiểu và người có quyền tắt trước ngày bắt đầu pilot.</p>
+ </div>
+</div>
+</section>
+
+<section id="slide-18" data-title="Tách biến đổi và cố định để hiểu ngưỡng 8.000 đ." data-notes="Bảng giữ cố định 40 triệu/tháng và phân bổ khối lượng theo 4/40, 10/40, 20/40. Đây là giả định minh họa simulated, không là chi phí đo thực. Trước khi dùng ngưỡng 8.000 phải chốt có gồm cố định và làm thay không." class="slide">
+<div class="kicker">A4 / E2 · Phụ lục · Chi phí khi mở dần</div>
+<h2>Tách biến đổi và cố định để hiểu ngưỡng 8.000 đ.</h2>
+<p class="where">Quy đổi theo cùng khối lượng tháng 45.000 yêu cầu toàn công ty; đây không phải số chi phí đã đo trong tuần pilot.</p>
+
+<div class="table-wrap"><table class="compact"><thead><tr><th>Nấc can thiệp</th><th>Thành công/tháng dự kiến</th><th>Cố định/việc</th><th>Biến đổi + cố định/việc</th></tr></thead><tbody><tr><td>4 người</td><td>3.375,0</td><td>11.852 đ</td><td>15.266 đ</td></tr><tr><td>10 người</td><td>8.437,5</td><td>4.741 đ</td><td>8.155 đ</td></tr><tr><td>20 người</td><td>16.875,0</td><td>2.370 đ</td><td>5.784 đ</td></tr></tbody></table></div>
+<div class="row"><div class="card grow"><span class="tag warn">Giả định của bảng</span><p>40 triệu đ/tháng giữ nguyên; khối lượng phân bổ đều theo số người. Biến đổi trong phạm vi khoảng 3.414 đ/việc. Các kết quả: <strong>simulated</strong>; chưa có phần nhân viên làm thay.</p></div>
+<div class="card grow"><span class="tag ok">Đề xuất chốt định nghĩa</span><p>YAML hiện chưa nói rõ ngưỡng 8.000 đ có gồm cố định không. Nên theo dõi biến đổi và cố định riêng; thống nhất phạm vi chỉ số trước khi áp dụng luật.</p></div></div>
+</section>
+
+<section id="slide-19" data-title="Một lệnh cho số liệu, một chuỗi event cho bằng chứng." data-notes="Kết thúc bằng ba lệnh demo. Dùng phím N để xem lời dẫn, F toàn màn hình, Home/End chuyển đầu/cuối. Ctrl+P in toàn bộ slide. Phân tích và bổ sung slide có hỗ trợ Codex; số được kiểm trực tiếp từ code và CSV." class="slide">
+<div class="kicker">Demo · D1, ba chỉ số và event</div>
+<h2>Một lệnh cho số liệu, một chuỗi event cho bằng chứng.</h2>
+
+<div class="row">
+ <div class="card grow"><span class="tag ok">Chạy trong thư mục src/</span><pre><code>python lab13.py
+python kiem_tra_cp4.py
+python -m unittest -v test_lab13.py</code></pre><p>D1: 1.251 / 859 / 299; chỉ số: 994/1.200, 48/177, 51/1.200.</p></div>
+ <div class="card grow"><span class="tag warn">Ba điều cần nói rõ</span><p><strong>Đủ mẫu:</strong> 20 cụm mỗi bên, 299 yêu cầu/người cho mức chênh 6 điểm.</p><p><strong>Đúng mẫu số:</strong> 177 yêu cầu được xem lại; các chỉ số còn lại dùng 1.200.</p><p><strong>Đủ bằng chứng:</strong> 11 event cần triển khai, có trace_id; chưa tuyên bố cải thiện nhân quả.</p></div>
+</div>
+<p class="source">Nguồn số: src/lab13.py, src/kiem_tra_cp4.py, hai CSV, report/team/chi_so.md và pilot_plan.yaml · snapshot dc4ab61 · toàn bộ dữ liệu lab là giả lập.</p>
+</section>
+<script type="application/json" id="lab-data">{
+  "source_commit": "dc4ab61",
+  "d1": {
+    "n": 1251,
+    "de_b": 2.48,
+    "n6": 859,
+    "m6": 299,
+    "power_5_voi_n6": 0.6416562543819839
+  },
+  "metrics": [
+    {
+      "numerator": 994,
+      "denominator": 1200,
+      "rate": 0.8283333333333334
+    },
+    {
+      "numerator": 48,
+      "denominator": 177,
+      "rate": 0.2711864406779661
+    },
+    {
+      "numerator": 51,
+      "denominator": 1200,
+      "rate": 0.0425
+    }
+  ],
+  "reopened_scope": {
+    "numerator": 39,
+    "denominator": 982
+  },
+  "timing": {
+    "scope_share": 0.8183333333333334,
+    "requests_per_staff_day": 30.6875,
+    "collecting_days": 10
+  }
+}</script>
+
+</div>
+<div class="progress" aria-hidden="true"></div>
+<aside id="speaker-notes" aria-label="Lời dẫn trình bày" hidden><div id="notes-label">Lời dẫn · Tuấn</div><p id="notes-content"></p></aside>
+<nav class="bar" aria-label="Điều khiển trình chiếu">
+ <button type="button" id="prev" aria-label="Slide trước">← Trước</button>
+ <div class="dots" id="dots" aria-label="Chọn slide"></div>
+ <div class="controls"><span class="count" id="count" aria-live="polite"></span><button type="button" id="notes" aria-controls="speaker-notes" aria-expanded="false">Lời dẫn N</button><button type="button" id="fullscreen" aria-label="Bật hoặc tắt toàn màn hình">⛶ F</button></div>
+ <button type="button" id="next" aria-label="Slide tiếp">Tiếp →</button>
+</nav>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  const panel = document.getElementById('speaker-notes');
+  const notesButton = document.getElementById('notes');
+  let i = 0;
+  slides.forEach((slide, n) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.title = `${n + 1}. ${slide.dataset.title}`;
+    dot.setAttribute('aria-label', dot.title);
+    dot.addEventListener('click', () => show(n));
+    dots.appendChild(dot);
+  });
+  function show(n, updateHash = true) {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, k) => {
+      s.classList.toggle('on', k === i);
+      s.setAttribute('aria-hidden', String(k !== i));
+      if (k === i) s.scrollTop = 0;
+    });
+    [...dots.children].forEach((d, k) => {
+      d.classList.toggle('on', k === i);
+      d.setAttribute('aria-current', k === i ? 'step' : 'false');
+    });
+    document.getElementById('count').textContent = `${i + 1} / ${slides.length}`;
+    document.getElementById('notes-content').textContent = slides[i].dataset.notes;
+    document.documentElement.style.setProperty('--progress', `${100 * (i + 1) / slides.length}%`);
+    if (updateHash) history.replaceState(null, '', `#slide-${i + 1}`);
+  }
+  function toggleNotes() {
+    panel.hidden = !panel.hidden;
+    notesButton.setAttribute('aria-expanded', String(!panel.hidden));
+  }
+  async function fullscreen() {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await document.documentElement.requestFullscreen();
+    } catch (_) { /* Browser may restrict fullscreen in embedded views. */ }
+  }
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  notesButton.onclick = toggleNotes;
+  document.getElementById('fullscreen').onclick = fullscreen;
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.target.closest('input, textarea, select')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || (e.key === ' ' && !e.target.closest('button'))) { e.preventDefault(); show(i + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    if (e.key === 'Home') { e.preventDefault(); show(0); }
+    if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+    if (e.key.toLowerCase() === 'n') toggleNotes();
+    if (e.key.toLowerCase() === 'f') fullscreen();
+    if (e.key === 'Escape' && !panel.hidden) toggleNotes();
+  });
+  const initial = /^#slide-(\d+)$/.exec(location.hash);
+  show(initial ? Math.min(slides.length - 1, Math.max(0, Number(initial[1]) - 1)) : 0, false);
+</script>
+</body>
+</html>
