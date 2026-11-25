@@ -51,6 +51,20 @@ Sao chép mục dưới đây cho từng thành viên.
 
 -
 
+## Bùi Thái Sỹ · 2A202604002
+
+### Phần việc và đóng góp
+
+- CP1–CP2 (kiểm số): tính tay độc lập chi phí mỗi việc thành công 4.472 đ [simulated] để đối chiếu với code; điền `report/team/bang_chi_phi.md` (A1–A4, B1–B4, xếp hạng ba yếu tố, B3, B4).
+- CP4 (viết code): D1 trong `src/lab13.py` (`co_mau`, `he_so_thiet_ke`, `in_d1`): 1.251 · DE 2,48 → 84 > 40 người · tối đa 1.000 · 300 · m ≥ 299; power 0,64 nếu tác động thật 5 điểm.
+- CP5: bốn dòng rủi ro kinh tế E2 trong `report/team/chi_so.md`, số lấy từ bảng độ nhạy.
+
+### Bằng chứng
+
+- CP4 `e4622f3`, CP1–CP2 `a78c1e8`, CP5 `b64ec1d`, báo cáo cá nhân `a7e7d1f` và `771372a`.
+- Chạy trong `src/`: `python -c "import lab13; lab13.in_d1()"`.
+- Báo cáo cá nhân, bảng kiểm tay và khai báo dùng AI: [202604002_BuiThaiSy.md](report/team/202604002_BuiThaiSy.md).
+
 ## Nguyễn Văn Tuấn · 2A202604121
 
 ### Phần việc và đóng góp
