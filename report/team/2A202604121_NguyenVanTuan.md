@@ -32,6 +32,16 @@
 - B4 cho 11.743 đ/việc thành công; dùng trung bình 15,2973 phút làm lại từ cột simulated toàn mẫu thì được 12.415 đ [simulated, chưa có cố định/phần nhân viên xử lý yêu cầu không thành công].
 - Giữ số chưa làm tròn trong tính toán; tài liệu làm tròn 15,3 phút và ghi 12.414 đ. Chênh khoảng 1 đ với output làm tròn tới đồng, nằm trong dung sai 2%.
 
+### CP4 · Kiểm số D1 và tỉ lệ mở lại
+
+- Tạo `src/kiem_tra_cp4.py` tính độc lập bằng công thức z của đề, đối chiếu xấp xỉ arcsine của statsmodels trong sai số 2%; dùng `csv.DictReader` để đọc tỉ lệ mở lại độc lập với pandas.
+- a) `ceil(1250,7167) = 1.251` yêu cầu/nhóm cho 0,70 → 0,75. b) `DE = 1 + 74 × 0,02 = 2,48`; `ceil(1.251 × 2,48) = 3.103`; cần 42 người/nhóm, tổng 84 > 40.
+- c) 20 người/nhóm có giới hạn `n_hiệu_dụng < 20 / 0,02 = 1.000 < 1.251`. d) 6 depot/nhóm có giới hạn `< 300`; tăng số yêu cầu mỗi cụm không vượt được giới hạn này.
+- e) Mức chênh 6 điểm cần `ceil(858,2725) = 859`; giải `20m / (0,98 + 0,02m) ≥ 859` cho `m ≥ 299`. `DE = 6,96`, cỡ mẫu hiệu dụng 859,20; 298 yêu cầu/người chưa đủ.
+- Cần phân biệt 859 là cỡ mẫu hiệu dụng; 20 × 299 = 5.980 yêu cầu thô/nhóm, tổng 11.960. Power ở tác động thật 5 điểm chỉ khoảng 0,6417.
+- Mở lại toàn mẫu: `51 / 1.200 = 4,25%`; phạm vi `noi_dia + hang_nang`: `39 / 982 = 3,9715%`. Trần 3% thấp hơn hiện trạng; bàn giao Tùng cân nhắc ngưỡng chênh +2 điểm so với đối chứng và trần 6% theo hướng dẫn.
+- Tại lúc kiểm số, D1 trong `lab13.py` còn là TODO của Sỹ; đây là kết quả kiểm độc lập để đối chiếu, chưa xác nhận đã kiểm được bản triển khai D1 của Sỹ. Quyết định cuối trong YAML do Tùng phụ trách.
+
 ## 4. Bằng chứng
 
 - Chạy từ `src/`: `..\.venv\Scripts\python.exe lab13.py`.
@@ -39,6 +49,8 @@
 - Kiểm tra: `python -m unittest -v test_lab13.py`; gồm ca lỗi vẫn tính tiền, không cộng trùng retry, lọc đúng yêu cầu, không sửa đầu vào và đối chiếu tổng từng loại với toàn bộ CSV.
 - Commit CP1: `0a7a514`; đã push lên nhánh `main` của repo nhóm.
 - CP2: 8 kiểm tra tự động đạt, bao gồm ba giới hạn retry, đối xứng độ nhạy, tính cộng và B4 đếm duy nhất theo yêu cầu.
+- Commit CP2: `5a0cfbd`; đã push lên `main`.
+- CP4: `python kiem_tra_cp4.py` chạy thành công; kiểm chéo statsmodels đạt sai số 2%, kiểm ngưỡng m = 298/299 và in tỉ lệ mở lại từ CSV.
 - `lab13_starter.py` và hai CSV giữ nguyên. Sỹ phụ trách kiểm tay và điền `bang_chi_phi.md`.
 
 ## 5. Công cụ AI đã dùng
