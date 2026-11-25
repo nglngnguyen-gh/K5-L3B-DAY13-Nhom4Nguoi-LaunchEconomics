@@ -31,9 +31,11 @@ Viết "chỉ số trong đợt chạy thử là …", không viết "trợ lý 
 
 ## E2 · Rủi ro kinh tế
 
-Ít nhất hai dòng, số lấy từ bảng độ nhạy (`bang_chi_phi.md`).
+Số lấy từ bảng độ nhạy (`bang_chi_phi.md`), đều là simulated.
 
 | Rủi ro | Tác động đã tính | Dấu hiệu theo dõi | Hành động | Người phụ trách |
 | --- | --- | --- | --- | --- |
-| ... | ... | ... | ... | ... |
-| ... | ... | ... | ... | ... |
+| Số ca làm lại tăng gấp đôi | +51,8%, lên 6.787 đ/việc [simulated] | Tỉ lệ `staff_rework_completed` theo tuần > 7% (đợt chạy thử: 4,9% trong phạm vi) | Thu hẹp về noi_dia, rà 20 trace làm lại gần nhất | PM trợ lý hoàn phí |
+| Phải xem lại 100% kéo dài | 11.743 đ = 0,98× (12.415 đ = 1,03× nếu làm lại 15,3 phút như dữ liệu) [simulated] | % yêu cầu được xem lại còn > 50% ở cuối bước 0.25; phút xem lại trung bình > 5 phút | Giảm xem lại theo bậc khi tỉ lệ sua + bo < 15% | Trưởng nhóm CSKH |
+| Khối lượng thấp hơn dự kiến | Cố định 40 triệu/tháng: +1.185 đ/việc ở 45.000 yêu cầu/tháng, +2.370 đ/việc nếu còn một nửa (5.784 đ = 0,48×) [simulated] | Số việc thành công theo tuần < 50% kế hoạch (33.750/tháng) | Không mở rộng pilot, xem lại hợp đồng chi phí cố định | PM trợ lý hoàn phí |
+| Lương nhân viên tăng | +23,1% khi lương +25%, lên 5.506 đ/việc [simulated] | Đơn giá phút nhân viên trong kỳ điều chỉnh lương | Cập nhật mô hình, ưu tiên giảm phút xem lại hơn giảm token | Giám đốc vận hành LogiX-VN |
