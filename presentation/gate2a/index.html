@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 13 · Hồ sơ launch v0 · Trợ lý hoàn phí LogiX-VN</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --ink: #14213D;
+  --paper: #F6F4EE;
+  --paper2: #ECE8DD;
+  --soft: #4A5568;
+  --accent: #B5541A;
+  --accent-big: #D9692A;
+  --blue: #2F5F9E;
+  --on-dark: #F6F4EE;
+  --on-dark-soft: #BCC6D8;
+  --line: #D3CDBE;
+}
+
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  color: var(--ink);
+}
+
+section {
+  padding: 128px;
+  background: var(--paper);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  box-sizing: border-box;
+}
+
+section.alt { background: var(--paper2); }
+
+section.dark {
+  background: var(--ink);
+  color: var(--on-dark);
+}
+
+h1, h2, h3 {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  margin: 0;
+}
+
+h1 { font-size: 104px; font-weight: 800; line-height: 1.05; }
+h2 { font-size: 64px; font-weight: 700; line-height: 1.1; }
+h3 { font-size: 36px; font-weight: 700; line-height: 1.2; }
+
+p { font-size: 32px; line-height: 1.4; margin: 0; }
+
+.eyebrow {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.dark .eyebrow { color: #F0A46E; }
+
+.head { display: flex; flex-direction: column; gap: 16px; }
+
+.lead { font-size: 32px; color: var(--soft); }
+.dark .lead { color: var(--on-dark-soft); }
+
+.small { font-size: 24px; color: var(--soft); }
+.dark .small { color: var(--on-dark-soft); }
+
+.tag {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Cover */
+.cover { justify-content: space-between; }
+.cover h1 { color: var(--on-dark); max-width: 1500px; }
+.cover .meta { display: flex; gap: 64px; }
+.cover .meta p { font-size: 28px; color: var(--on-dark-soft); }
+.cover .meta b { color: var(--on-dark); }
+
+/* Big number statement */
+.bignum {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  font-size: 220px;
+  font-weight: 800;
+  line-height: 1;
+  color: #F0A46E;
+}
+
+.stat-row { display: flex; gap: 48px; }
+.stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 36px 40px;
+  border-radius: 20px;
+  background: #FBFAF6;
+  border: 2px solid var(--line);
+}
+.alt .stat { background: #F6F4EE; }
+.dark .stat { background: #1D2D50; border-color: #2C3F66; }
+.stat .num {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.dark .stat .num { color: #F0A46E; }
+.stat .num.hot { color: var(--accent); }
+.stat .lbl { font-size: 28px; line-height: 1.35; color: var(--soft); }
+.dark .stat .lbl { color: var(--on-dark-soft); }
+
+/* Bars */
+.bars { display: flex; flex-direction: column; gap: 22px; }
+.bar-row { display: flex; align-items: center; gap: 28px; }
+.bar-label { width: 460px; font-size: 28px; font-weight: 500; }
+.bar-track { flex: 1; display: flex; align-items: center; gap: 20px; }
+.bar { height: 48px; border-radius: 8px; background: var(--blue); }
+.bar.hot { background: var(--accent-big); }
+.bar.muted { background: #A9B4C6; }
+.bar-val { font-size: 28px; font-weight: 700; white-space: nowrap; }
+
+/* Tables */
+table { font-size: 28px; color: var(--ink); width: 100%; }
+th { text-align: left; font-weight: 700; }
+
+/* Cards */
+.cards { display: flex; gap: 32px; }
+.card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 36px;
+  border-radius: 20px;
+  background: #FBFAF6;
+  border: 2px solid var(--line);
+}
+.alt .card { background: #F6F4EE; }
+.card .body { font-size: 26px; line-height: 1.45; color: var(--soft); }
+.card.warn { border-color: var(--accent); }
+
+.qnum {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--accent-big);
+  line-height: 1;
+}
+
+.note {
+  font-size: 24px;
+  color: var(--soft);
+  border-left: 6px solid var(--accent);
+  padding-left: 24px;
+}
+
+.spacer { flex: 1; }
+
+/* Motion */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.in { animation: rise 500ms ease-out both; animation-delay: calc(var(--i, 0) * 120ms); }
+
+
+html, body { margin:0; height:100%; background:#0B1222; overflow:hidden; }
+#stage { position:absolute; left:50%; top:50%; width:1920px; height:1080px;
+         transform-origin:center center; }
+#stage > section { position:absolute; inset:0; width:1920px; height:1080px; display:none; }
+#stage > section.active { display:flex; }
+#stage aside { display:none; }
+#stage table { border-collapse:collapse; }
+#stage th, #stage td { padding:.4em .6em; vertical-align:top;
+                       border-bottom:1px solid rgba(128,128,128,.35); }
+body.static .in { animation:none !important; }
+#hud { position:fixed; right:16px; bottom:12px; font:14px Inter, Arial, sans-serif;
+       color:#BCC6D8; opacity:.8; }
+#notes { position:fixed; left:0; right:0; bottom:0; max-height:30%; overflow:auto; display:none;
+         background:rgba(11,18,34,.95); color:#F6F4EE; font:18px/1.5 Inter, Arial, sans-serif;
+         padding:16px 24px; }
+body.show-notes #notes { display:block; }
+@media print {
+  html, body { overflow:visible; height:auto; background:none; }
+  #hud, #notes { display:none !important; }
+  #stage { position:static; transform:none !important; }
+  #stage > section { position:relative; display:flex !important; page-break-after:always; }
+  .in { animation:none !important; }
+  @page { size:1920px 1080px; margin:0; }
+}
+
+</style>
+</head>
+<body>
+<div id="stage">
+<section id="cover" class="dark cover" data-transition="fade">
+<div class="head">
+<p class="eyebrow">AI20K K5 · Ngày 13 · Launch &amp; Economics · Gate 2a</p>
+<h1>Định giá trợ lý hoàn phí và kế hoạch pilot LogiX-VN</h1>
+<p class="lead">Hồ sơ launch v0 · dữ liệu giả lập: 1.200 yêu cầu, 1.624 lần chạy của agent</p>
+</div>
+<div class="meta">
+<p><b>Nhóm 4 người</b> · Lớp L3B</p>
+<p>Nguyễn Lương Nguyên · Nguyễn Văn Tuấn · Bùi Thái Sỹ · Vũ Ngọc Tùng</p>
+</div>
+<aside>Giới thiệu nhóm và đề bài: định giá trợ lý hoàn phí, rồi bảo vệ kế hoạch pilot trước hội đồng Gate 2a. Toàn bộ dữ liệu là giả lập; Gate 2a chỉ duyệt kế hoạch pilot.</aside>
+</section>
+<section id="boi-canh">
+<div class="head">
+<p class="eyebrow">Bối cảnh</p>
+<h2>12 depot, 40 nhân viên CSKH, 1.500 yêu cầu hoàn phí mỗi ngày</h2>
+<p class="lead">Trợ lý đã chạy thử 2 tuần ở 6 depot. Hồ sơ phải trả lời bốn câu hỏi trước hội đồng Gate 2a.</p>
+</div>
+<div class="cards">
+<div class="card in" style="--i:0"><p class="qnum">1</p><h3>Có đáng chạy không?</h3><p class="body">Chi phí thật cho mỗi việc thành công, so với nhân viên tự làm 12.000 đ.</p></div>
+<div class="card in" style="--i:1"><p class="qnum">2</p><h3>Nhân viên có dùng không?</h3><p class="body">Chỉ số sử dụng và danh sách event cần ghi.</p></div>
+<div class="card in" style="--i:2"><p class="qnum">3</p><h3>Khi hỏng thì sao?</h3><p class="body">Năm loại lỗi theo Google PAIR, mỗi cách khắc phục có người phụ trách.</p></div>
+<div class="card in" style="--i:3"><p class="qnum">4</p><h3>Pilot ra được quyết định?</h3><p class="body">Có đối chứng, đủ cỡ mẫu, có luật dừng viết trước.</p></div>
+</div>
+<aside>Bối cảnh từ README: LogiX-VN 12 depot, ~40 nhân viên, ~45.000 yêu cầu/tháng. Mẫu ngẫu nhiên 1.200 yêu cầu, 1.624 lần chạy. Bốn câu hỏi định hướng toàn bộ hồ sơ.</aside>
+</section>
+<section id="chi-phi" class="dark">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ A · Chi phí mỗi việc thành công</p>
+</div>
+<div class="in" style="--i:0"><p class="bignum">4.472 đ</p></div>
+<p class="lead in" style="--i:1">mỗi việc thành công [simulated] — gấp <b style="color:#F6F4EE">16,3 lần</b> hoá đơn token + tool chia số yêu cầu (274,7 đ)</p>
+<div class="stat-row in" style="--i:2">
+<div class="stat"><p class="num">4,37 triệu đ</p><p class="lbl">Tổng chi phí, tính mọi lần chạy kể cả lỗi</p></div>
+<div class="stat"><p class="num">978</p><p class="lbl">Việc thành công (ket_qua = thanh_cong) trên 1.200 yêu cầu</p></div>
+<div class="stat"><p class="num">5.865 đ</p><p class="lbl">Chi phí cả hệ thống mỗi yêu cầu = 0,49× nhân viên tự làm [simulated]</p></div>
+</div>
+<aside>Tử số tính mọi lần chạy, kể cả lỗi, vì lần lỗi vẫn tốn token và tool. Mẫu số chỉ đếm việc thành công vì chỉ việc thành công tạo giá trị. A1 đạt ba phép thử 1,20 · 1,25 · 1,25. Sỹ đã kiểm tay 4.472 đ bằng awk, khớp code. So công bằng với nhân viên: cộng 222 ca không thành công × 12.000 đ, ra 5.865 đ/yêu cầu.</aside>
+</section>
+<section id="co-cau">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ A2 · Cơ cấu chi phí</p>
+<h2>Giờ nhân viên chiếm 92,5% chi phí, token chỉ 7,5%</h2>
+</div>
+<div class="bars">
+<div class="bar-row in" style="--i:0"><p class="bar-label">Làm lại [simulated]</p><div class="bar-track"><div class="bar hot" style="width:777px"></div><p class="bar-val">2.264.000 đ · 51,8%</p></div></div>
+<div class="bar-row in" style="--i:1"><p class="bar-label">Xem lại [simulated]</p><div class="bar-track"><div class="bar" style="width:611px"></div><p class="bar-val">1.780.000 đ · 40,7%</p></div></div>
+<div class="bar-row in" style="--i:2"><p class="bar-label">Token (đo từ trace)</p><div class="bar-track"><div class="bar muted" style="width:84px"></div><p class="bar-val">245.585 đ · 5,6%</p></div></div>
+<div class="bar-row in" style="--i:3"><p class="bar-label">Tool (5.600 lần × 15 đ)</p><div class="bar-track"><div class="bar muted" style="width:29px"></div><p class="bar-val">84.000 đ · 1,9%</p></div></div>
+</div>
+<div class="spacer"></div>
+<p class="note">Trong token + tool, phần của lần chạy thứ 2 và 3 là 93.804 đ. Nếu chi phí chỉ gấp 1–2 lần hoá đơn token, tức là đã quên giờ nhân viên.</p>
+<aside>Bảng A2 trong bang_chi_phi.md. Hai dòng xem lại và làm lại tính từ cột _simulated nên ghi simulated. Kết luận: tối ưu giá token gần như không đổi gì; phải giảm phút xem lại và số ca làm lại.</aside>
+</section>
+<section id="theo-loai" class="alt">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ A3 · Tách theo loại yêu cầu</p>
+<h2>Quốc tế đắt gấp 1,88 lần nhân viên tự làm</h2>
+</div>
+<table>
+<tr><th style="width:16%">Loại</th><th style="width:12%; text-align:right">Số yêu cầu</th><th style="width:14%; text-align:right">Thành công</th><th style="width:16%; text-align:right">Lần chạy/yêu cầu</th><th style="width:18%; text-align:right">Chi phí/việc [simulated]</th><th style="width:24%; text-align:right">So 12.000 đ</th></tr>
+<tr><td>noi_dia</td><td style="text-align:right">824</td><td style="text-align:right">95,0%</td><td style="text-align:right">1,11</td><td style="text-align:right">2.696 đ</td><td style="text-align:right">0,22×</td></tr>
+<tr><td>hang_nang</td><td style="text-align:right">158</td><td style="text-align:right">74,1%</td><td style="text-align:right">1,47</td><td style="text-align:right">8.221 đ</td><td style="text-align:right">0,69×</td></tr>
+<tr><td>doi_tac</td><td style="text-align:right">68</td><td style="text-align:right">54,4%</td><td style="text-align:right">1,88</td><td style="text-align:right">10.215 đ</td><td style="text-align:right">0,85× · sát ngưỡng</td></tr>
+<tr style="background:#F5DCC8"><td>quoc_te</td><td style="text-align:right">150</td><td style="text-align:right">27,3%</td><td style="text-align:right">2,32</td><td style="text-align:right">22.515 đ</td><td style="text-align:right">1,88× · lỗ</td></tr>
+</table>
+<div class="spacer"></div>
+<p class="note">Chạy lại không cứu quoc_te: tỉ lệ ok lần 1 là 30,0%, lần 2 chỉ 11,4%, lần 3 chỉ 2,2% (đo từ trace). Lỗi lặp lại trên cùng yêu cầu nên chạy thêm chỉ tốn tiền.</p>
+<aside>quoc_te: 27,3% thành công, 2,32 lần chạy mỗi yêu cầu, 1,88× so với nhân viên. doi_tac 0,85× sát ngưỡng và có điều khoản riêng nên cũng loại khỏi phạm vi pilot.</aside>
+</section>
+<section id="pham-vi">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ A4 · Phạm vi và chi phí cố định</p>
+<h2>Thu hẹp phạm vi pilot về noi_dia + hang_nang</h2>
+<p class="lead">982 yêu cầu, 900 thành công, 3.414 đ/việc trước chi phí cố định [simulated]. Cộng 40 triệu đ/tháng:</p>
+</div>
+<div class="stat-row">
+<div class="stat in" style="--i:0"><p class="tag">45.000 yêu cầu/tháng · 33.750 việc thành công</p><p class="num">4.599 đ</p><p class="lbl">+1.185 đ cố định mỗi việc · <b>0,38×</b> so với 12.000 đ [simulated]</p></div>
+<div class="stat in" style="--i:1"><p class="tag">Một nửa khối lượng · 16.875 việc thành công</p><p class="num hot">5.784 đ</p><p class="lbl">+2.370 đ cố định mỗi việc · <b>0,48×</b> so với 12.000 đ [simulated]</p></div>
+</div>
+<div class="spacer"></div>
+<p class="note">Chi phí cố định không đổi kết luận ở quy mô đầy đủ, nhưng tăng gấp đôi mỗi việc khi khối lượng giảm một nửa. Hồ sơ ghi rõ đã cộng cố định ở khối lượng nào.</p>
+<aside>Việc thành công mỗi tháng = 45.000 × 900 ÷ 1.200 = 33.750. Lý do thu hẹp phạm vi bằng số: quoc_te 1,88×, doi_tac 0,85× và có điều khoản riêng.</aside>
+</section>
+<section id="do-nhay" class="alt">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ B1–B2 · Độ nhạy (gốc 4.472 đ) [simulated]</p>
+<h2>Pilot phải theo dõi làm lại và xem lại, không phải giá token</h2>
+</div>
+<div class="bars">
+<div class="bar-row in" style="--i:0"><p class="bar-label">1 · Số ca làm lại gấp đôi</p><div class="bar-track"><div class="bar hot" style="width:622px"></div><p class="bar-val">6.787 đ · +51,8%</p></div></div>
+<div class="bar-row in" style="--i:1"><p class="bar-label">2 · Tỉ lệ xem lại gấp đôi</p><div class="bar-track"><div class="bar hot" style="width:488px"></div><p class="bar-val">6.292 đ · +40,7%</p></div></div>
+<div class="bar-row in" style="--i:2"><p class="bar-label">3 · Lương nhân viên +25%</p><div class="bar-track"><div class="bar" style="width:277px"></div><p class="bar-val">5.506 đ · +23,1%</p></div></div>
+<div class="bar-row in" style="--i:3"><p class="bar-label">Giá token gấp đôi</p><div class="bar-track"><div class="bar muted" style="width:67px"></div><p class="bar-val">4.723 đ · +5,6%</p></div></div>
+</div>
+<div class="spacer"></div>
+<p class="note">Mô hình cộng tuyến tính: token gấp đôi cùng xem lại gấp đôi = 6.543 đ (+46,3% = 5,6% + 40,7%). Mỗi kịch bản “giảm một nửa” giảm đúng nửa mức tăng (51,8 → 25,9).</p>
+<aside>B1 đủ 9 kịch bản trong bang_chi_phi.md; ở đây chỉ hiện các kịch bản tăng. Xếp hạng ba yếu tố: làm lại ±51,8%, xem lại ±40,7%, lương +23,1%. Giới hạn 2 lần: −5,2%; 1 lần: −8,1%.</aside>
+</section>
+<section id="gioi-han">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ B3 · Giới hạn chạy lại</p>
+<h2>Giới hạn 2 lần rẻ nhất cho công ty, dù không có chi phí mỗi việc thấp nhất</h2>
+</div>
+<table>
+<tr><th style="width:16%">Giới hạn</th><th style="width:22%; text-align:right">Tổng chi phí trợ lý</th><th style="width:20%; text-align:right">Không thành công</th><th style="width:22%; text-align:right">Chi phí cả hệ thống</th><th style="width:20%; text-align:right">Chi phí/việc</th></tr>
+<tr><td>1 lần</td><td style="text-align:right">3.621.781 đ</td><td style="text-align:right">319</td><td style="text-align:right">7.449.781 đ</td><td style="text-align:right">4.111 đ · thấp nhất</td></tr>
+<tr style="background:#F5DCC8"><td>2 lần</td><td style="text-align:right">4.093.220 đ</td><td style="text-align:right">234</td><td style="text-align:right">6.901.220 đ · rẻ nhất</td><td style="text-align:right">4.237 đ</td></tr>
+<tr><td>3 lần</td><td style="text-align:right">4.373.585 đ</td><td style="text-align:right">222</td><td style="text-align:right">7.037.585 đ</td><td style="text-align:right">4.472 đ</td></tr>
+</table>
+<div class="spacer"></div>
+<p class="note">Chi phí cả hệ thống = chi phí trợ lý + 12.000 đ × số yêu cầu không thành công. Tối ưu riêng chi phí mỗi việc (1 lần) đẩy thêm 85 việc sang nhân viên, tốn thêm 548.561 đ [simulated].</p>
+<aside>Mọi số trên slide này là simulated. Bài học: chỉ số chi phí mỗi việc thành công có thể giảm bằng cách đẩy việc khó sang nhân viên, nên phải nhìn cả hệ thống.</aside>
+</section>
+<section id="xem-lai" class="dark">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ B4 · Nếu phải xem lại tất cả</p>
+<h2>Xem lại 100% thì trợ lý gần như không tiết kiệm</h2>
+</div>
+<div class="stat-row">
+<div class="stat in" style="--i:0"><p class="num">0,98×</p><p class="lbl">11.743 đ/việc nếu xem lại 5 phút và làm lại 9 phút [simulated]</p></div>
+<div class="stat in" style="--i:1"><p class="num">1,03×</p><p class="lbl">12.415 đ/việc nếu làm lại 15,3 phút như dữ liệu — đắt hơn nhân viên [simulated]</p></div>
+<div class="stat in" style="--i:2"><p class="num">≤ 5,1 phút</p><p class="lbl">Ngưỡng hoà vốn mỗi lần xem lại (≤ 4,8 phút nếu làm lại 15,3 phút) [simulated]</p></div>
+</div>
+<div class="spacer"></div>
+<p class="lead">Pilot phải đo phút xem lại thật và học được tỉ lệ xem lại giảm an toàn xuống mức nào. Tiền xem lại chiếm 90% chi phí kịch bản này.</p>
+<aside>Phạm vi noi_dia + hang_nang: 948 yêu cầu có lần chạy ok × 5 phút = 9.480.000 đ; 48 ca làm lại × 9 phút = 864.000 đ; token + tool 224.513 đ; tổng 10.568.513 đ ÷ 900 việc thành công.</aside>
+</section>
+<section id="loi">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ C · Bảng lỗi theo Google PAIR</p>
+<h2>Gắn nhãn độc lập, đồng thuận 16/20 = 80%</h2>
+</div>
+<table style="font-size:24px">
+<tr><th style="width:20%">Loại lỗi (ca)</th><th style="width:34%">Phát hiện bằng event có trace_id</th><th style="width:28%">Khắc phục</th><th style="width:18%">Phụ trách</th></tr>
+<tr><td>Do người dùng (1)</td><td>request_validated: thiếu hoặc sai ≥ 1 trường bắt buộc</td><td>Dừng tự động, xin bổ sung dữ liệu</td><td>Trưởng vận hành CSKH</td></tr>
+<tr><td>Hệ thống (2)</td><td>tool_call_result: mỗi lần lỗi hoặc timeout</td><td>Thử lại trong giới hạn, rồi chuyển nhân viên</td><td>Chủ hệ thống</td></tr>
+<tr><td>Ngữ cảnh (3)</td><td>context_check: thiếu hồ sơ hoặc chính sách hết hiệu lực</td><td>Tải lại nguồn chuẩn, không khớp thì chuyển</td><td>Chủ dữ liệu/chính sách</td></tr>
+<tr><td>Giới hạn hệ thống (4)</td><td>scope_check: yêu cầu ngoài phạm vi, trước khi agent hành động</td><td>Chuyển nhân viên theo quy trình</td><td>Chủ quy trình hoàn phí</td></tr>
+<tr><td>Ngầm (5)</td><td>quality_audit hằng tuần: ≥ 1 kết quả sai trong mẫu</td><td>Tạm dừng kịch bản, rà trace cùng loại</td><td>Trưởng QA/rủi ro</td></tr>
+</table>
+<p class="note">4 ca không trùng (8, 9, 13, 17) có quy tắc phân biệt: lộ ra ngay lúc chạy là Hệ thống, chỉ thấy qua hậu kiểm là Ngầm.</p>
+<aside>Người gắn nhãn 1: Vũ Ngọc Tùng; người gắn nhãn 2: Nguyễn Lương Nguyên. Gắn trong 8 phút, không trao đổi. Gắn nhãn theo nguyên nhân gốc, không theo chỗ cần sửa.</aside>
+</section>
+<section id="co-mau">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ D1 · Cỡ mẫu (0,70 → 0,75; alpha 0,05; power 0,8; ICC 0,02)</p>
+<h2>Số cụm quyết định, không phải tổng số yêu cầu</h2>
+</div>
+<div class="cards">
+<div class="card in" style="--i:0"><p class="tag">a · Theo yêu cầu</p><p class="qnum">1.251</p><p class="body">yêu cầu mỗi nhóm</p></div>
+<div class="card warn in" style="--i:1"><p class="tag">b · Theo nhân viên, m = 75</p><p class="qnum">84 &gt; 40</p><p class="body">DE 2,48 → 3.103 yêu cầu/nhóm, cần 42 người/nhóm: không đủ người</p></div>
+<div class="card warn in" style="--i:2"><p class="tag">c · 20 nhân viên/nhóm</p><p class="qnum">≤ 1.000</p><p class="body">cỡ mẫu hiệu dụng tối đa 20 ÷ 0,02, thấp hơn 1.251</p></div>
+<div class="card warn in" style="--i:3"><p class="tag">d · 6 depot/nhóm</p><p class="qnum">≤ 300</p><p class="body">tăng yêu cầu mỗi cụm không vượt được giới hạn</p></div>
+</div>
+<div class="card in" style="--i:4; flex:none"><p class="tag">e · Đánh đổi: mức chênh 6 điểm, 20 nhân viên mỗi nhóm</p><p class="body">Cần 859 hiệu dụng → m ≥ 299 yêu cầu/người (DE 6,96), tổng 11.960 yêu cầu. Nếu tác động thật chỉ 5 điểm, power còn 0,64.</p></div>
+<aside>D1 do Sỹ viết code (co_mau, he_so_thiet_ke, in_d1), Tuấn kiểm độc lập bằng kiem_tra_cp4.py. Hệ số thiết kế = 1 + (m − 1) × ICC. Cỡ mẫu hiệu dụng c × m ÷ DE luôn nhỏ hơn c ÷ ICC.</aside>
+</section>
+<section id="pilot" class="alt">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ D · pilot_plan.yaml</p>
+<h2>Chia ngẫu nhiên 20/20 nhân viên theo depot</h2>
+</div>
+<div class="stat-row">
+<div class="stat in" style="--i:0"><p class="tag">Đơn vị chia · nhân viên</p><p class="num">20 cụm</p><p class="lbl">mỗi nhánh; bật dần 4 → 10 → 20 nhân viên can thiệp</p></div>
+<div class="stat in" style="--i:1"><p class="tag">Mức chênh tối thiểu</p><p class="num">6 điểm</p><p class="lbl">n = 859/nhánh, DE 6,96, m ≥ 299</p></div>
+<div class="stat in" style="--i:2"><p class="tag">Ngày quyết định</p><p class="num">05/01/2027</p><p class="lbl">Chủ pilot: Giám đốc vận hành LogiX-VN</p></div>
+</div>
+<div class="cards">
+<div class="card in" style="--i:4"><h3>Tách được tác động</h3><p class="body">Đối chứng chạy cùng tuần, trợ lý tắt cho tài khoản đối chứng. Chỉ số, ngưỡng, luật dừng chốt trước; giữa kỳ chỉ xem an toàn.</p></div>
+<div class="card in" style="--i:5"><h3>Ảnh hưởng gián tiếp</h3><p class="body">Nhân viên cùng depot có thể chia sẻ cách làm: giới hạn quyền trợ lý theo staff_id, ghi log agent_opened.</p></div>
+<div class="card in" style="--i:6"><h3>Thời gian đo</h3><p class="body">~37,5 yêu cầu/người/ngày nên cần 8 ngày gom đủ 299 yêu cầu, thêm 7 ngày theo dõi mở lại.</p></div>
+</div>
+<aside>Phạm vi: chỉ noi_dia và hang_nang. Đánh đổi đã chấp nhận: 40 nhân viên không đủ lực cho MDE 5 điểm khi chia theo cụm, nên chọn MDE 6 điểm và công khai power 0,64 nếu tác động thật là 5 điểm. Rollback: cờ tắt, hiệu lực trong 30 phút, yêu cầu đang mở chuyển sang nhân viên.</aside>
+</section>
+<section id="luat-dung" class="dark">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ D · Bốn luật dừng viết trước, mỗi luật có người có quyền dừng</p>
+<h2>NẾU – TRONG – THÌ – KHÔNG THÌ</h2>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:28px">
+<div class="card in" style="--i:0; background:#1D2D50; border-color:#F0A46E; padding:28px 32px; gap:10px"><p class="tag" style="color:#F0A46E">1 · An toàn, mọi nấc</p><p class="small" style="color:#F6F4EE">Mở lại 7 ngày vượt trần 6%, hoặc ≥ 1 ca hoàn hai lần, hoặc báo “đã hoàn” mà sổ cái không có bản ghi ok, trong bất kỳ lần kiểm tra hằng ngày.</p><p class="small" style="color:#BCC6D8">→ Giám đốc vận hành tắt trợ lý trong 30 phút.</p></div>
+<div class="card in" style="--i:1; background:#1D2D50; border-color:#2C3F66; padding:28px 32px; gap:10px"><p class="tag" style="color:#F0A46E">2 · An toàn, từ nấc 10 nhân viên</p><p class="small" style="color:#F6F4EE">Mở lại cao hơn đối chứng ≥ 2 điểm trong 2 lần kiểm tra liên tiếp. Không áp dụng ở nấc 4 người: lệch do ngẫu nhiên ~56/1.000 lần.</p><p class="small" style="color:#BCC6D8">→ Giám đốc vận hành tắt trợ lý trong 30 phút.</p></div>
+<div class="card in" style="--i:2; background:#1D2D50; border-color:#2C3F66; padding:28px 32px; gap:10px"><p class="tag" style="color:#F0A46E">3 · Chi phí</p><p class="small" style="color:#F6F4EE">Chi phí biến đổi mỗi việc thành công (chưa cộng 40 triệu cố định) vượt 8.000 đ trong 2 tuần liên tiếp.</p><p class="small" style="color:#BCC6D8">→ PM trợ lý hoàn phí thu hẹp về noi_dia, tối đa 2 lần chạy.</p></div>
+<div class="card in" style="--i:3; background:#1D2D50; border-color:#2C3F66; padding:28px 32px; gap:10px"><p class="tag" style="color:#F0A46E">4 · Mức độ sử dụng</p><p class="small" style="color:#F6F4EE">Tỉ lệ bỏ qua gợi ý (sua hoặc bo) vượt 40% trong 1 tuần.</p><p class="small" style="color:#BCC6D8">→ Trưởng nhóm CSKH phỏng vấn 5 nhân viên trong 3 ngày.</p></div>
+</div>
+<p class="small">Không thì: không chuyển sang nấc rollout kế tiếp. Mốc hiện tại: mở lại 3,97% trong phạm vi pilot, bỏ qua gợi ý 27,12%.</p>
+<aside>Ngưỡng 8.000 đ không cộng chi phí cố định vì ở nấc 4 nhân viên, 40 triệu chia khoảng 3.375 việc đã là khoảng 11.900 đ/việc, luật sẽ kích hoạt dù chi phí chạy không đổi. Chi phí cố định theo dõi riêng ở dòng rủi ro khối lượng thấp. Kiểm tra an toàn hằng ngày, chỉ trên yêu cầu đã đủ cửa sổ 7 ngày.</aside>
+</section>
+<section id="chi-so" class="alt">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ E1 · Ba chỉ số tính thử trên 1.200 yêu cầu</p>
+<h2>Số đợt chạy thử, chưa phải tác động của trợ lý</h2>
+</div>
+<div class="stat-row">
+<div class="stat in" style="--i:0"><p class="tag">Chính · kết quả</p><p class="num">82,83%</p><p class="lbl">994 / 1.200 đóng trong 24 giờ và không mở lại trong 7 ngày</p></div>
+<div class="stat in" style="--i:1"><p class="tag">Dùng</p><p class="num">27,12%</p><p class="lbl">48 / 177 yêu cầu được xem lại bị sửa hoặc bỏ gợi ý</p></div>
+<div class="stat in" style="--i:2"><p class="tag">An toàn</p><p class="num">4,25%</p><p class="lbl">51 / 1.200 mở lại trong 7 ngày (noi_dia + hang_nang: 3,97%)</p></div>
+</div>
+<div class="cards">
+<div class="card in" style="--i:3"><h3>Đề xuất · Dùng</h3><p class="body">Tỉ lệ mở trợ lý trên yêu cầu đủ điều kiện của nhóm can thiệp, theo tuần. Chưa tính: CSV thiếu event mở trợ lý.</p></div>
+<div class="card in" style="--i:4"><h3>Đề xuất · An toàn</h3><p class="body">Tỉ lệ hoàn sai tiền qua kiểm tra mẫu ngẫu nhiên 100 yêu cầu/tuần. Chưa tính: thiếu số tiền đúng độc lập.</p></div>
+</div>
+<aside>Dữ liệu không có nhóm đối chứng nên 82,83% chưa chứng minh tác động so với baseline 0,70. Tỉ lệ mở lại không bao quát lỗi sai tiền hoặc lỗi ngầm, nên cần chỉ số kiểm tra mẫu. Ba chỉ số này không dùng cột _simulated.</aside>
+</section>
+<section id="event">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ E1 · Danh sách event</p>
+<h2>11 event có trace_id, ghi cả nhóm đối chứng</h2>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px 32px">
+<div><h3 style="font-size:28px">refund_request_created</h3><p class="small">Nhận yêu cầu, xác định phạm vi và nhóm</p></div>
+<div><h3 style="font-size:28px">agent_opened</h3><p class="small">Nhân viên mở trợ lý trên một yêu cầu</p></div>
+<div><h3 style="font-size:28px">agent_run_completed</h3><p class="small">Mỗi lần chạy, kể cả lỗi: token, tool</p></div>
+<div><h3 style="font-size:28px">agent_suggestion_shown</h3><p class="small">Nhân viên thực sự thấy gợi ý</p></div>
+<div><h3 style="font-size:28px">staff_review_decision</h3><p class="small">giu / sua / bo và phút xem lại đo thật</p></div>
+<div><h3 style="font-size:28px">staff_rework_completed</h3><p class="small">Phút làm lại đo thật thay số giả lập</p></div>
+<div><h3 style="font-size:28px">refund_ledger_write</h3><p class="small">Mỗi lần ghi sổ hoàn tiền, kể cả lỗi</p></div>
+<div><h3 style="font-size:28px">handoff_to_staff</h3><p class="small">Chuyển nhân viên khi hết giới hạn</p></div>
+<div><h3 style="font-size:28px">ticket_closed</h3><p class="small">Đóng yêu cầu, xét mốc 24 giờ</p></div>
+<div><h3 style="font-size:28px">ticket_reopened</h3><p class="small">Mở lại, xét cửa sổ 7 ngày</p></div>
+<div><h3 style="font-size:28px">audit_sample_checked</h3><p class="small">Kiểm tra mẫu 100 yêu cầu/tuần</p></div>
+</div>
+<div class="spacer"></div>
+<p class="note">Trường chung: event_id, event_at, request_id, trace_id, staff_id, depot, loai, arm, assignment_version. Chỉ số nào không tính được từ danh sách này thì chưa đo được.</p>
+<aside>Mỗi chỉ số E1 đã ánh xạ tới event: chỉ số chính nối created → closed → reopened; bỏ qua gợi ý dùng suggestion_shown và review_decision; hoàn sai tiền dùng audit_sample_checked nối refund_ledger_write.</aside>
+</section>
+<section id="rui-ro" class="alt">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ E2 · Rủi ro kinh tế (số từ bảng độ nhạy, simulated)</p>
+<h2>Bốn rủi ro, mỗi rủi ro có ngưỡng và người phụ trách</h2>
+</div>
+<table style="font-size:26px">
+<tr><th style="width:21%">Rủi ro</th><th style="width:22%">Tác động</th><th style="width:22%">Dấu hiệu theo dõi</th><th style="width:20%">Hành động</th><th style="width:15%">Phụ trách</th></tr>
+<tr><td>Làm lại gấp đôi</td><td>+51,8% → 6.787 đ/việc</td><td>Làm lại theo tuần &gt; 7% (hiện 4,9%)</td><td>Thu hẹp về noi_dia, rà 20 trace</td><td>PM trợ lý hoàn phí</td></tr>
+<tr><td>Xem lại 100% kéo dài</td><td>0,98× · 1,03× nếu làm lại 15,3 phút</td><td>Còn &gt; 50% được xem lại cuối bước 0.25; &gt; 5 phút/lần</td><td>Giảm xem lại theo bậc khi sua + bo &lt; 15%</td><td>Trưởng nhóm CSKH</td></tr>
+<tr><td>Khối lượng thấp</td><td>+2.370 đ/việc cố định nếu còn một nửa</td><td>Việc thành công &lt; 50% kế hoạch</td><td>Không mở rộng pilot, xem lại hợp đồng</td><td>PM trợ lý hoàn phí</td></tr>
+<tr><td>Lương tăng</td><td>+23,1% khi lương +25%</td><td>Đơn giá phút trong kỳ điều chỉnh</td><td>Ưu tiên giảm phút xem lại</td><td>Giám đốc vận hành</td></tr>
+</table>
+<aside>Bốn dòng rủi ro E2 trong chi_so.md, do Sỹ viết. Tất cả số tác động là simulated vì có phần phút xem lại, làm lại.</aside>
+</section>
+<section id="ho-so" class="alt">
+<div class="head">
+<p class="eyebrow">Hồ sơ launch v0 · bảy mục</p>
+<h2>Hồ sơ đủ bảy mục, mỗi mục có người phụ trách</h2>
+</div>
+<table style="font-size:26px">
+<tr><th style="width:30%">Mục</th><th style="width:40%">Con số chính</th><th style="width:15%">Trạng thái</th><th style="width:15%">Phụ trách</th></tr>
+<tr><td>1 · Chi phí mỗi việc thành công</td><td>4.472 đ · 16,3× hoá đơn token</td><td>Giả lập</td><td>Người viết code</td></tr>
+<tr><td>2 · Ba yếu tố nhạy nhất</td><td>Làm lại ±51,8% · xem lại ±40,7% · lương +23,1%</td><td>Giả lập</td><td>Người kiểm số</td></tr>
+<tr><td>3 · So với nhân viên tự làm</td><td>0,49× cả hệ thống; xem lại 100% 0,98–1,03×</td><td>Giả lập</td><td>Người kiểm số</td></tr>
+<tr><td>4 · Ba chỉ số</td><td>82,83% · 27,12% · 4,25%</td><td>Xong</td><td>Người kiểm số</td></tr>
+<tr><td>5 · Bảng lỗi</td><td>Đồng thuận 16/20; đủ 5 loại</td><td>Xong</td><td>Người gắn nhãn 1</td></tr>
+<tr><td>6 · Pilot plan</td><td>20 + 20 nhân viên, MDE 6 điểm, 4 luật dừng</td><td>Xong</td><td>Người viết code</td></tr>
+<tr><td>7 · Rủi ro kinh tế</td><td>4 dòng từ bảng độ nhạy</td><td>Giả lập</td><td>Người viết code</td></tr>
+</table>
+<aside>Trạng thái “Xong” nghĩa là “Xong, có bằng chứng” theo hồ sơ. Các mục dựa trên cột _simulated ghi Giả lập. Chi tiết trong report/team/ho_so_launch_v0.md.</aside>
+</section>
+<section id="de-xuat" class="dark">
+<div class="head">
+<p class="eyebrow">Đề xuất trước hội đồng Gate 2a</p>
+<h2>Go có điều kiện cho noi_dia + hang_nang</h2>
+<p class="lead">Cả hệ thống 0,49× của 12.000 đ; noi_dia 0,22×, hang_nang 0,69× [simulated]. Bắt đầu 14/12/2026, nấc 20 nhân viên từ 21/12, quyết định 05/01/2027.</p>
+</div>
+<table style="font-size:26px; color:#F6F4EE">
+<tr style="background:#1D2D50"><th style="width:58%">Điều kiện</th><th style="width:24%">Phụ trách</th><th style="width:18%">Kiểm tra</th></tr>
+<tr><td>1. Khoá chống hoàn trùng và đối soát sổ cái theo trace_id chạy được trước ngày bắt đầu</td><td>Kỹ sư trưởng agent</td><td>11/12/2026</td></tr>
+<tr><td>2. Ký chấp nhận MDE 6 điểm, biết power ≈ 0,64 nếu tác động thật chỉ 5 điểm</td><td>Giám đốc vận hành</td><td>11/12/2026</td></tr>
+<tr><td>3. Bật đủ event có trace_id; sau tuần 1 thay phút simulated bằng phút đo thật, tính lại chi phí</td><td>PM trợ lý hoàn phí</td><td>21/12/2026</td></tr>
+<tr><td>4. Giảm xem lại theo bậc khi sua + bo &lt; 15%; phút xem lại trung bình ≤ 5 phút (xem lại 100% là 0,98–1,03×)</td><td>Trưởng nhóm CSKH</td><td>20/12/2026</td></tr>
+</table>
+<aside>Theo ho_so_launch_v0.md. Hai con số bất lợi — xem lại 100% đẩy lên 0,98–1,03× và power 0,64 nếu tác động thật 5 điểm — được xử lý bằng điều kiện 4 và điều kiện 2. Điều kiện 1 là điều kiện để luật dừng an toàn số 1 có tác dụng.</aside>
+</section>
+<section id="nhom">
+<div class="head">
+<p class="eyebrow">Phân công</p>
+<h2>Đổi người viết code sau giờ giải lao</h2>
+</div>
+<div class="cards">
+<div class="card in" style="--i:0"><h3>Nguyễn Lương Nguyên</h3><p class="tag">Nhóm trưởng · gắn nhãn 2 · giữ hồ sơ</p><p class="body">Nhãn bộ 2 ở CP3; hồ sơ launch v0; báo cáo nhóm; trình bày tại Gate 2a.</p></div>
+<div class="card in" style="--i:1"><h3>Nguyễn Văn Tuấn</h3><p class="tag">Viết code → kiểm số</p><p class="body">A1–A4, B1–B4 trong lab13.py; kiểm độc lập D1; ba chỉ số và 11 event E1.</p></div>
+<div class="card in" style="--i:2"><h3>Bùi Thái Sỹ</h3><p class="tag">Kiểm số → viết code</p><p class="body">Kiểm tay 4.472 đ, điền bang_chi_phi.md; code D1; bốn rủi ro kinh tế E2.</p></div>
+<div class="card in" style="--i:3"><h3>Vũ Ngọc Tùng</h3><p class="tag">Gắn nhãn 1</p><p class="body">Nhãn bộ 1 và bảng khắc phục CP3; D2, luật dừng trong pilot_plan.yaml.</p></div>
+</div>
+<div class="spacer"></div>
+<p class="note">Mọi con số do src/lab13.py tính hoặc tính tay có ghi cách tính. Số từ cột _simulated đều ghi nhãn simulated.</p>
+<aside>Theo PHAN_CONG.md và TEAM.md. Kiểm tra: python lab13.py in ba phép thử ĐẠT; unittest 10/10; kiem_tra_cp4.py khớp D1.</aside>
+</section>
+</div>
+<div id="hud"></div>
+<div id="notes"></div>
+<script>
+const slides = [...document.querySelectorAll('#stage > section')];
+const stage = document.getElementById('stage');
+const hud = document.getElementById('hud');
+const notes = document.getElementById('notes');
+let cur = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1));
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+}
+function show(i) {
+  cur = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((el, k) => el.classList.toggle('active', k === cur));
+  hud.textContent = `${cur + 1} / ${slides.length} · ← → chuyển slide · N lời dẫn · F toàn màn hình`;
+  const a = slides[cur].querySelector('aside');
+  notes.textContent = a ? a.textContent : '';
+  history.replaceState(null, '', '#' + (cur + 1));
+}
+if (location.search.includes('static')) document.body.classList.add('static');
+addEventListener('resize', fit);
+addEventListener('keydown', e => {
+  if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) show(cur + 1);
+  else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) show(cur - 1);
+  else if (e.key === 'Home') show(0);
+  else if (e.key === 'End') show(slides.length - 1);
+  else if (e.key === 'n' || e.key === 'N') document.body.classList.toggle('show-notes');
+  else if (e.key === 'f' || e.key === 'F') document.documentElement.requestFullscreen?.();
+});
+addEventListener('click', e => show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)));
+fit(); show(cur);
+</script>
+</body>
+</html>

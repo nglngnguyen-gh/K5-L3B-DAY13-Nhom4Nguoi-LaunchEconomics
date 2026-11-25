@@ -1,0 +1,16 @@
+<section id="loi">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ C · Bảng lỗi theo Google PAIR</p>
+<h2>Gắn nhãn độc lập, đồng thuận 16/20 = 80%</h2>
+</div>
+<table style="font-size:24px">
+<tr><th style="width:20%">Loại lỗi (ca)</th><th style="width:34%">Phát hiện bằng event có trace_id</th><th style="width:28%">Khắc phục</th><th style="width:18%">Phụ trách</th></tr>
+<tr><td>Do người dùng (1)</td><td>request_validated: thiếu hoặc sai ≥ 1 trường bắt buộc</td><td>Dừng tự động, xin bổ sung dữ liệu</td><td>Trưởng vận hành CSKH</td></tr>
+<tr><td>Hệ thống (2)</td><td>tool_call_result: mỗi lần lỗi hoặc timeout</td><td>Thử lại trong giới hạn, rồi chuyển nhân viên</td><td>Chủ hệ thống</td></tr>
+<tr><td>Ngữ cảnh (3)</td><td>context_check: thiếu hồ sơ hoặc chính sách hết hiệu lực</td><td>Tải lại nguồn chuẩn, không khớp thì chuyển</td><td>Chủ dữ liệu/chính sách</td></tr>
+<tr><td>Giới hạn hệ thống (4)</td><td>scope_check: yêu cầu ngoài phạm vi, trước khi agent hành động</td><td>Chuyển nhân viên theo quy trình</td><td>Chủ quy trình hoàn phí</td></tr>
+<tr><td>Ngầm (5)</td><td>quality_audit hằng tuần: ≥ 1 kết quả sai trong mẫu</td><td>Tạm dừng kịch bản, rà trace cùng loại</td><td>Trưởng QA/rủi ro</td></tr>
+</table>
+<p class="note">4 ca không trùng (8, 9, 13, 17) có quy tắc phân biệt: lộ ra ngay lúc chạy là Hệ thống, chỉ thấy qua hậu kiểm là Ngầm.</p>
+<aside>Người gắn nhãn 1: Vũ Ngọc Tùng; người gắn nhãn 2: Nguyễn Lương Nguyên. Gắn trong 8 phút, không trao đổi. Gắn nhãn theo nguyên nhân gốc, không theo chỗ cần sửa.</aside>
+</section>
