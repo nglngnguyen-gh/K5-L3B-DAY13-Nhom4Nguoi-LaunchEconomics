@@ -24,7 +24,7 @@ pilot:
     unit: "staff"
     control_share: 0.5
     randomized: true
-  rollout: [0.10, 0.25, 0.50] # Bật dần cho 4, 10, 20 nhân viên can thiệp; giữ 20 đối chứng đồng thời. Đo chỉ số chính ở nấc 0.50 và sau đủ 7 ngày theo dõi.
+  rollout: [0.10, 0.25, 0.50] # Mỗi nấc 1 tuần; bật dần cho 4, 10, 20 nhân viên can thiệp, giữ 20 đối chứng đồng thời. Đo chỉ số chính sau nấc 0.50 và đủ 7 ngày theo dõi.
   primary_metric:
     name: dong_trong_24h_khong_mo_lai_7_ngay
     baseline: 0.70
