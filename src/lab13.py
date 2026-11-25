@@ -53,6 +53,51 @@ def mo_hinh(runs, reqs, gia_vao=26, gia_ra=130, gia_tool=15, luong_phut=2000,
     raise NotImplementedError('VIẾT Ở ĐÂY')
 
 
+# ---------- Nhiệm vụ D1 · Cỡ mẫu (CP4) ----------
+# Chạy riêng phần này (không cần A, B): python -c "import lab13; lab13.in_d1()"
+P_GOC, MUC_TIEU, ALPHA, POWER, ICC = 0.70, 0.05, 0.05, 0.80, 0.02
+SO_NHAN_VIEN, SO_DEPOT = 40, 12
+
+
+def co_mau(p1, p2, alpha=ALPHA, power=POWER):
+    """Cỡ mẫu mỗi nhóm khi so hai tỉ lệ (z chính xác 1,95996 và 0,84162)."""
+    from statistics import NormalDist
+    za, zb = NormalDist().inv_cdf(1 - alpha / 2), NormalDist().inv_cdf(power)
+    pb = (p1 + p2) / 2
+    return math.ceil((za * math.sqrt(2 * pb * (1 - pb))
+                      + zb * math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2 / (p2 - p1) ** 2)
+
+
+def he_so_thiet_ke(m, icc=ICC):
+    """DE = 1 + (m − 1) × ICC, m là số yêu cầu mỗi cụm."""
+    return 1 + (m - 1) * icc
+
+
+def in_d1():
+    print('\n== D1 · Cỡ mẫu (baseline 0,70; +5 điểm; alpha 0,05; power 0,8; ICC 0,02) ==')
+    n = co_mau(P_GOC, P_GOC + MUC_TIEU)
+    print(f'a) Chia theo yêu cầu: {n:,} yêu cầu mỗi nhóm')
+    de = he_so_thiet_ke(75)
+    n_b = math.ceil(n * de)
+    nv = math.ceil(n_b / 75)
+    print(f'b) Theo nhân viên, m = 75: DE = {de:.2f}; {n_b:,} mỗi nhóm → {nv} người mỗi nhóm,'
+          f' tổng {2 * nv} so với {SO_NHAN_VIEN} nhân viên: '
+          f'{"không đủ người" if 2 * nv > SO_NHAN_VIEN else "đủ người"}')
+    print(f'c) 20 nhân viên mỗi nhóm: hiệu dụng tối đa c/ICC = {20 / ICC:,.0f}'
+          f' {"<" if 20 / ICC < n else ">="} {n:,}: {"không đạt" if 20 / ICC < n else "đạt"}')
+    print(f'd) {SO_DEPOT // 2} depot mỗi nhóm: hiệu dụng tối đa = {(SO_DEPOT // 2) / ICC:,.0f}')
+    n6 = co_mau(P_GOC, P_GOC + 0.06)
+    # 20m / (1 + (m-1)ICC) >= n6  ⇔  m >= n6 (1 - ICC) / (20 - n6 ICC)
+    m = math.ceil(n6 * (1 - ICC) / (20 - n6 * ICC))
+    print(f'e) Mức chênh 6 điểm ({n6} mỗi nhóm), 20 người mỗi nhóm: m ≥ {m} yêu cầu mỗi người'
+          f' (DE {he_so_thiet_ke(m):.2f}, hiệu dụng {20 * m / he_so_thiet_ke(m):.0f})')
+    from statsmodels.stats.power import NormalIndPower
+    from statsmodels.stats.proportion import proportion_effectsize
+    pw = NormalIndPower().power(proportion_effectsize(P_GOC + MUC_TIEU, P_GOC), nobs1=n6, alpha=ALPHA)
+    print(f'   Đánh đổi: thiết kế cho 6 điểm, nếu tác động thật chỉ 5 điểm thì power ≈ {pw:.2f}')
+    return dict(n=n, de_b=de, n6=n6, m6=m, power_5_voi_n6=pw)
+
+
 if __name__ == '__main__':
     runs = pd.read_csv('logix_runs.csv')
     reqs = pd.read_csv('logix_requests.csv', keep_default_na=False)
@@ -62,6 +107,4 @@ if __name__ == '__main__':
         print(f'{ten:12s} {gia_tri:>14,.0f}')
     # TODO CP1 · Nhiệm vụ A3: tính lại theo từng giá trị của cột loai.
     # TODO CP2 · Nhiệm vụ B: đổi từng yếu tố, ghi vào bảng độ nhạy.
-    # TODO CP4 · Nhiệm vụ D: cỡ mẫu.
-    #   from statsmodels.stats.proportion import proportion_effectsize
-    #   from statsmodels.stats.power import NormalIndPower
+    in_d1()   # CP4 · Nhiệm vụ D1: cỡ mẫu
