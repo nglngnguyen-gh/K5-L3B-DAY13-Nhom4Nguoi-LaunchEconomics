@@ -243,6 +243,31 @@ def in_nhiem_vu_b(runs, reqs):
     print('B4 chưa có cố định và phần nhân viên xử lý yêu cầu không thành công; pilot cần đo phút thực và học mức xem lại có thể giảm an toàn.')
 
 
+def tinh_chi_so(reqs):
+    """E1: trả về (tử số, mẫu số, tỉ lệ); không dùng cột thời gian simulated.
+
+    CSV đã cho sẵn các cờ theo dõi 24 giờ/7 ngày. Các chỉ số này chỉ mô tả
+    đợt chạy thử; không suy ra tác động nhân quả khi không có đối chứng.
+    """
+    duoc_xem = reqs[reqs['duoc_xem_lai'] == 1]
+    dem = {
+        'Chính: đóng 24h, không mở lại 7 ngày': (
+            ((reqs['dong_trong_24h'] == 1) & (reqs['mo_lai_trong_7_ngay'] == 0)).sum(), len(reqs)),
+        'Dùng: bỏ qua gợi ý': (duoc_xem['quyet_dinh_xem_lai'].isin(['sua', 'bo']).sum(), len(duoc_xem)),
+        'An toàn: mở lại 7 ngày': ((reqs['mo_lai_trong_7_ngay'] == 1).sum(), len(reqs)),
+    }
+    return {ten: (int(tu), mau, float(tu / mau) if mau else math.nan)
+            for ten, (tu, mau) in dem.items()}
+
+
+def in_chi_so(reqs):
+    in_bang('CP5 · E1 chỉ số trong đợt chạy thử (dữ liệu giả lập của lab)',
+            ['Chỉ số', 'Tử số', 'Mẫu số', 'Tỉ lệ'],
+            [[ten, tu, mau, f'{so(100 * ti_le, 2)}%']
+             for ten, (tu, mau, ti_le) in tinh_chi_so(reqs).items()])
+    print('Đợt chạy thử không có đối chứng; không kết luận trợ lý đã nâng chỉ số từ baseline 0,70.')
+
+
 if __name__ == '__main__':
     runs = pd.read_csv('logix_runs.csv')
     reqs = pd.read_csv('logix_requests.csv', keep_default_na=False)
@@ -252,3 +277,4 @@ if __name__ == '__main__':
     # TODO CP4 · Nhiệm vụ D: cỡ mẫu.
     #   from statsmodels.stats.proportion import proportion_effectsize
     #   from statsmodels.stats.power import NormalIndPower
+    in_chi_so(reqs)

@@ -50,3 +50,17 @@ Sao chép mục dưới đây cho từng thành viên.
 ### Bằng chứng
 
 -
+
+## Nguyễn Văn Tuấn · 2A202604121
+
+### Phần việc và đóng góp
+
+- CP1–CP2: viết mô hình chi phí A1–A4, chín kịch bản B1, cặp yếu tố B2, chi phí hệ thống B3 và xem lại 100% B4 trong `src/lab13.py`.
+- CP4: tính độc lập năm câu D1 và tỉ lệ mở lại trong `src/kiem_tra_cp4.py` để đối chiếu với D1 của Sỹ; không thay phần triển khai D1 chính thức.
+- CP5: tính ba chỉ số, đề xuất hai chỉ số và đặc tả 11 event có `trace_id` trong phần E1 của `report/team/chi_so.md`.
+
+### Bằng chứng
+
+- CP1 `0a7a514`, CP2 `5a0cfbd`, CP4 `ed6f315`; CP5 nằm ở commit `feat(cp5): add Tuan metrics, events and individual report`.
+- Chạy trong `src/`: `python lab13.py`, `python -m unittest -v test_lab13.py` (10 kiểm tra), `python kiem_tra_cp4.py`.
+- Báo cáo cá nhân và khai báo dùng AI: [2A202604121_NguyenVanTuan.md](report/team/2A202604121_NguyenVanTuan.md).

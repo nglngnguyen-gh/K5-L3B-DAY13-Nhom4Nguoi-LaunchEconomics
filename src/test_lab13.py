@@ -119,5 +119,25 @@ class DoNhayTests(unittest.TestCase):
         self.assertAlmostEqual(sensitivity['cps'], 12414, delta=1)
 
 
+class ChiSoTests(unittest.TestCase):
+    def test_csv_numerators_and_denominators(self):
+        reqs = pd.read_csv('logix_requests.csv', keep_default_na=False)
+        values = list(lab13.tinh_chi_so(reqs).values())
+        self.assertEqual([(n, d) for n, d, _ in values], [(994, 1200), (48, 177), (51, 1200)])
+
+    def test_review_denominator_and_unreviewed_decisions(self):
+        reqs = pd.DataFrame({
+            'duoc_xem_lai': [1, 1, 0], 'quyet_dinh_xem_lai': ['giu', 'sua', 'bo'],
+            'dong_trong_24h': [1, 1, 0], 'mo_lai_trong_7_ngay': [0, 1, 0],
+        })
+        values = list(lab13.tinh_chi_so(reqs).values())
+        self.assertEqual(values[0], (1, 3, 1 / 3))
+        self.assertEqual(values[1], (1, 2, .5))
+        self.assertEqual(values[2], (1, 3, 1 / 3))
+        reqs['duoc_xem_lai'] = 0
+        self.assertTrue(math.isnan(list(lab13.tinh_chi_so(reqs).values())[1][2]))
+        self.assertTrue(all(math.isnan(ratio) for _, _, ratio in lab13.tinh_chi_so(reqs.iloc[:0]).values()))
+
+
 if __name__ == '__main__':
     unittest.main()

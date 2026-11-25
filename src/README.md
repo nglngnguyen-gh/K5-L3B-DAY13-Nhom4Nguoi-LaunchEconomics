@@ -68,6 +68,6 @@ python -m unittest -v test_lab13.py
 python kiem_tra_cp4.py
 ```
 
-`lab13.py` đã in các bảng A1–A4 và B1–B4; người kiểm số dùng output để điền `report/team/bang_chi_phi.md` theo phân công. `kiem_tra_cp4.py` là phép tính D1 độc lập và tỉ lệ mở lại của Tuấn, dùng đối chiếu với phần D1 do Sỹ viết tại `TODO CP4` trong `lab13.py`. Chạy thành công script kiểm số này chưa xác nhận kế hoạch YAML hoặc code D1 của thành viên khác đã hoàn tất.
+`lab13.py` đã in các bảng A1–A4, B1–B4 và ba chỉ số E1; người kiểm số dùng output để điền hồ sơ theo phân công. `tinh_chi_so(reqs)` trả về cả tử số, mẫu số và tỉ lệ để soát mẫu số 177 của chỉ số bỏ qua gợi ý. `kiem_tra_cp4.py` là phép tính D1 độc lập và tỉ lệ mở lại của Tuấn, dùng đối chiếu với phần D1 do Sỹ viết tại `TODO CP4` trong `lab13.py`. Chạy thành công script kiểm số này chưa xác nhận kế hoạch YAML hoặc code D1 của thành viên khác đã hoàn tất.
 
 Trên máy Tuấn, môi trường hiện có đặt tại `../.venv/`; có thể thay `python` bằng `..\.venv\Scripts\python.exe` trong các lệnh trên. Từ PowerShell có thể mở đúng môi trường và thư mục bằng `. D:\Vinuni_AI\.tools\Start-Day13.ps1`.
