@@ -63,7 +63,7 @@ Sao chép mục dưới đây cho từng thành viên.
 
 - CP4 `8f15aa6`, CP1–CP2 `8753f98`, CP5 `daff0d0`, báo cáo cá nhân `6bb10aa` và `ccafdfa`.
 - Chạy trong `src/`: `python -c "import lab13; lab13.in_d1()"`.
-- Báo cáo cá nhân, bảng kiểm tay và khai báo dùng AI: [202604002_BuiThaiSy.md](report/team/202604002_BuiThaiSy.md).
+- Báo cáo cá nhân, bảng kiểm tay và khai báo dùng AI: [2A202604002_BuiThaiSy.md](report/team/2A202604002_BuiThaiSy.md).
 
 ## Nguyễn Văn Tuấn · 2A202604121
 
