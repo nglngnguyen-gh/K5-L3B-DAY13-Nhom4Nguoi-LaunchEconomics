@@ -43,7 +43,6 @@ Cách làm:
 - **Đề xuất cuối: Go có điều kiện** cho noi_dia + hang_nang, kèm 4 điều kiện có vai phụ trách và ngày kiểm tra. Hai con số bất lợi được nêu kèm cách xử lý:
   - power ≈ 0,64 nếu tác động thật chỉ 5 điểm;
   - xem lại 100% thì 0,98–1,03× [simulated].
-- **Kết quả duyệt chéo nhóm nhận được:** ... (điền sau buổi Gate 2a: điểm C6, C7, C8, quyết định và câu hỏi của hội đồng)
 
 ## 5. Khó khăn và cách xử lý
 
