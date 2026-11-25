@@ -2,19 +2,19 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A hoặc L3B
-- Repo nhóm: `K5-L3A-DAY13-TenNhom-LaunchEconomics` (xem [SUBMISSION.md](SUBMISSION.md))
+- Tên nhóm: Nhóm 4 người
+- Lớp: L3B
+- Repo nhóm: `K5-L3B-DAY13-Nhom4Nguoi-LaunchEconomics`
 - URL repo, nhánh nộp, commit chốt:
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
-|   3 | Bùi Thái Sỹ | 2A202604002 | | sybui2004 | Kiểm số (CP1–CP2) → viết code (CP4–CP5) |
-|   4 |        |      |       |        |         |
+|   1 | Nguyễn Lương Nguyên (nhóm trưởng) | 2A202604005 |       | nglngnguyen-gh | Người gắn nhãn 2, kiêm giữ hồ sơ |
+|   2 | Nguyễn Văn Tuấn | 2A202604121 | tuantaicon2005@gmail.com | tuannguyen-cell | Người viết code (CP1–CP2) → Người kiểm số (CP4–CP5) |
+|   3 | Bùi Thái Sỹ | 2A202604002 |       | sybui2004 | Người kiểm số (CP1–CP2) → Người viết code (CP4–CP5) |
+|   4 | Vũ Ngọc Tùng | 2A202604106 |       | TungVN-2911 | Người gắn nhãn 1 |
 
 Bốn vai của lab:
 
@@ -50,3 +50,17 @@ Sao chép mục dưới đây cho từng thành viên.
 ### Bằng chứng
 
 -
+
+## Nguyễn Văn Tuấn · 2A202604121
+
+### Phần việc và đóng góp
+
+- CP1–CP2: viết mô hình chi phí A1–A4, chín kịch bản B1, cặp yếu tố B2, chi phí hệ thống B3 và xem lại 100% B4 trong `src/lab13.py`.
+- CP4: tính độc lập năm câu D1 và tỉ lệ mở lại trong `src/kiem_tra_cp4.py` để đối chiếu với D1 của Sỹ; không thay phần triển khai D1 chính thức.
+- CP5: tính ba chỉ số, đề xuất hai chỉ số và đặc tả 11 event có `trace_id` trong phần E1 của `report/team/chi_so.md`.
+
+### Bằng chứng
+
+- CP1 `0a7a514`, CP2 `5a0cfbd`, CP4 `ed6f315`; CP5 nằm ở commit `feat(cp5): add Tuan metrics, events and individual report`.
+- Chạy trong `src/`: `python lab13.py`, `python -m unittest -v test_lab13.py` (10 kiểm tra), `python kiem_tra_cp4.py`.
+- Báo cáo cá nhân và khai báo dùng AI: [2A202604121_NguyenVanTuan.md](report/team/2A202604121_NguyenVanTuan.md).
