@@ -1,0 +1,14 @@
+<section id="co-mau">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ D1 · Cỡ mẫu (0,70 → 0,75; alpha 0,05; power 0,8; ICC 0,02)</p>
+<h2>Số cụm quyết định, không phải tổng số yêu cầu</h2>
+</div>
+<div class="cards">
+<div class="card in" style="--i:0"><p class="tag">a · Theo yêu cầu</p><p class="qnum">1.251</p><p class="body">yêu cầu mỗi nhóm</p></div>
+<div class="card warn in" style="--i:1"><p class="tag">b · Theo nhân viên, m = 75</p><p class="qnum">84 &gt; 40</p><p class="body">DE 2,48 → 3.103 yêu cầu/nhóm, cần 42 người/nhóm: không đủ người</p></div>
+<div class="card warn in" style="--i:2"><p class="tag">c · 20 nhân viên/nhóm</p><p class="qnum">≤ 1.000</p><p class="body">cỡ mẫu hiệu dụng tối đa 20 ÷ 0,02, thấp hơn 1.251</p></div>
+<div class="card warn in" style="--i:3"><p class="tag">d · 6 depot/nhóm</p><p class="qnum">≤ 300</p><p class="body">tăng yêu cầu mỗi cụm không vượt được giới hạn</p></div>
+</div>
+<div class="card in" style="--i:4; flex:none"><p class="tag">e · Đánh đổi: mức chênh 6 điểm, 20 nhân viên mỗi nhóm</p><p class="body">Cần 859 hiệu dụng → m ≥ 299 yêu cầu/người (DE 6,96), tổng 11.960 yêu cầu. Nếu tác động thật chỉ 5 điểm, power còn 0,64.</p></div>
+<aside>D1 do Sỹ viết code (co_mau, he_so_thiet_ke, in_d1), Tuấn kiểm độc lập bằng kiem_tra_cp4.py. Hệ số thiết kế = 1 + (m − 1) × ICC. Cỡ mẫu hiệu dụng c × m ÷ DE luôn nhỏ hơn c ÷ ICC.</aside>
+</section>

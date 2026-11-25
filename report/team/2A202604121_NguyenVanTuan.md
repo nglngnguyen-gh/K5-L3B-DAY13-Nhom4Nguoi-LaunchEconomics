@@ -40,7 +40,7 @@
 - e) Mức chênh 6 điểm cần `ceil(858,2725) = 859`; giải `20m / (0,98 + 0,02m) ≥ 859` cho `m ≥ 299`. `DE = 6,96`, cỡ mẫu hiệu dụng 859,20; 298 yêu cầu/người chưa đủ.
 - Cần phân biệt 859 là cỡ mẫu hiệu dụng; 20 × 299 = 5.980 yêu cầu thô/nhóm, tổng 11.960. Power ở tác động thật 5 điểm chỉ khoảng 0,6417.
 - Mở lại toàn mẫu: `51 / 1.200 = 4,25%`; phạm vi `noi_dia + hang_nang`: `39 / 982 = 3,9715%`. Trần 3% thấp hơn hiện trạng; bàn giao Tùng cân nhắc ngưỡng chênh +2 điểm so với đối chứng và trần 6% theo hướng dẫn.
-- Tại lúc kiểm số, D1 trong `lab13.py` còn là TODO của Sỹ; đây là kết quả kiểm độc lập để đối chiếu, chưa xác nhận đã kiểm được bản triển khai D1 của Sỹ. Quyết định cuối trong YAML do Tùng phụ trách.
+- Đã đối chiếu bản D1 của Sỹ (commit `8f15aa6`, đã có trong `main` tại `537f478`) với phép kiểm độc lập: `n = 1.251`, `DE = 2,48`, `n6 = 859`, `m = 299`, `DE6 = 6,96` và power ở mức chênh 5 điểm đều khớp. `kiem_tra_cp4.py` nay tự gọi `in_d1()` để kiểm lại các giá trị này. Quyết định cuối trong YAML do Tùng phụ trách.
 
 ### CP5 · Chỉ số và event
 
@@ -58,6 +58,7 @@
 - CP2: 8 kiểm tra tự động đạt, bao gồm ba giới hạn retry, đối xứng độ nhạy, tính cộng và B4 đếm duy nhất theo yêu cầu.
 - Commit CP2: `5a0cfbd`; đã push lên `main`.
 - CP4: `python kiem_tra_cp4.py` chạy thành công; kiểm chéo statsmodels đạt sai số 2%, kiểm ngưỡng m = 298/299 và in tỉ lệ mở lại từ CSV.
+- Kiểm cập nhật CP4: đối chiếu trực tiếp `in_d1()` của Sỹ với số độc lập đạt; `python lab13.py` chạy cả A, B, D1 và E1 tới cuối; 10/10 kiểm tra hồi quy vẫn đạt sau khi tích hợp.
 - Commit CP4: `ed6f315`; đã push lên `main`.
 - CP5: `python lab13.py` chạy tới cuối; `python -m unittest -v test_lab13.py` đạt 10/10 kiểm tra. Đếm lại độc lập bằng `csv.DictReader` khớp các tử số/mẫu số, kiểm tra 11 event đều có `trace_id`.
 - `lab13_starter.py` và hai CSV giữ nguyên. Sỹ phụ trách kiểm tay và điền `bang_chi_phi.md`.
@@ -73,4 +74,4 @@
 
 Hoàn thành phần Tuấn được giao ở CP1, CP2, phép kiểm số độc lập CP4 và E1 của CP5 trên máy này. Mỗi phần được commit riêng theo checkpoint; không tạo checkpoint nhãn CP3 khi không có phần việc riêng để ghi nhận.
 
-Phần D1 chính thức do Sỹ triển khai cần đối chiếu với `kiem_tra_cp4.py` khi có bản cập nhật. Các thành viên vẫn cần tự giải thích công thức, kiểm số độc lập, hoàn tất hồ sơ của mình và tự nộp link trên LMS; chưa ghi nhận duyệt chéo hay kiểm tra trên máy thứ hai.
+Phần D1 chính thức của Sỹ đã được kiểm đối chiếu thành công. Các thành viên vẫn cần tự giải thích công thức, hoàn tất hồ sơ của mình và tự nộp link trên LMS; chưa ghi nhận duyệt chéo hay kiểm tra trên máy thứ hai.

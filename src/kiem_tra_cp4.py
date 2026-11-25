@@ -1,10 +1,12 @@
 """Phần kiểm số CP4 của Tuấn; chạy trong src/: python kiem_tra_cp4.py.
 
 Tính độc lập bằng công thức z và csv.DictReader để đối chiếu với code D1
-do Sỹ viết trong lab13.py. Không thay phần TODO CP4 của Sỹ hay kế hoạch của Tùng.
+do Sỹ viết trong lab13.py. Không thay phần triển khai D1 hay kế hoạch của Tùng.
 Nguồn: docs/du_lieu_va_cong_thuc.md và hướng dẫn chi tiết nhiệm vụ D1.
 """
 import csv
+import contextlib
+import io
 import math
 from statistics import NormalDist
 
@@ -12,6 +14,7 @@ from statsmodels.stats.power import NormalIndPower
 from statsmodels.stats.proportion import proportion_effectsize
 
 from lab13 import in_bang, so
+import lab13
 
 
 def co_mau_doc_lap(p1, p2, alpha=.05, power=.8):
@@ -75,6 +78,20 @@ def kiem_tra_mo_lai():
     return dong
 
 
+def doi_chieu_d1(tham_chieu):
+    """Đối chiếu các giá trị D1 chính thức của Sỹ với phép tính độc lập."""
+    with contextlib.redirect_stdout(io.StringIO()):
+        ket_qua = lab13.in_d1()
+    for khoa_chinh, khoa_doc_lap in [('n', 'n5'), ('n6', 'n6'), ('m6', 'm6')]:
+        assert ket_qua[khoa_chinh] == tham_chieu[khoa_doc_lap], khoa_chinh
+    assert math.isclose(ket_qua['de_b'], 2.48)
+    assert math.isclose(lab13.he_so_thiet_ke(ket_qua['m6']), tham_chieu['design_effect'])
+    assert math.isclose(ket_qua['power_5_voi_n6'], tham_chieu['power5'])
+    print('Đối chiếu bản triển khai D1 của Sỹ với phép kiểm độc lập của Tuấn: ĐẠT.')
+    return ket_qua
+
+
 if __name__ == '__main__':
-    kiem_tra_d1()
+    tham_chieu = kiem_tra_d1()
+    doi_chieu_d1(tham_chieu)
     kiem_tra_mo_lai()

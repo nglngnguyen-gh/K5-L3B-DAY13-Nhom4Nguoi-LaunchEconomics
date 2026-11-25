@@ -1,0 +1,17 @@
+<section id="pilot" class="alt">
+<div class="head">
+<p class="eyebrow">Nhiệm vụ D · pilot_plan.yaml</p>
+<h2>Chia ngẫu nhiên 20/20 nhân viên theo depot</h2>
+</div>
+<div class="stat-row">
+<div class="stat in" style="--i:0"><p class="tag">Đơn vị chia · nhân viên</p><p class="num">20 cụm</p><p class="lbl">mỗi nhánh; bật dần 4 → 10 → 20 nhân viên can thiệp</p></div>
+<div class="stat in" style="--i:1"><p class="tag">Mức chênh tối thiểu</p><p class="num">6 điểm</p><p class="lbl">n = 859/nhánh, DE 6,96, m ≥ 299</p></div>
+<div class="stat in" style="--i:2"><p class="tag">Ngày quyết định</p><p class="num">05/01/2027</p><p class="lbl">Chủ pilot: Giám đốc vận hành LogiX-VN</p></div>
+</div>
+<div class="cards">
+<div class="card in" style="--i:4"><h3>Tách được tác động</h3><p class="body">Đối chứng chạy cùng tuần, trợ lý tắt cho tài khoản đối chứng. Chỉ số, ngưỡng, luật dừng chốt trước; giữa kỳ chỉ xem an toàn.</p></div>
+<div class="card in" style="--i:5"><h3>Ảnh hưởng gián tiếp</h3><p class="body">Nhân viên cùng depot có thể chia sẻ cách làm: giới hạn quyền trợ lý theo staff_id, ghi log agent_opened.</p></div>
+<div class="card in" style="--i:6"><h3>Thời gian đo</h3><p class="body">~37,5 yêu cầu/người/ngày nên cần 8 ngày gom đủ 299 yêu cầu, thêm 7 ngày theo dõi mở lại.</p></div>
+</div>
+<aside>Phạm vi: chỉ noi_dia và hang_nang. Đánh đổi đã chấp nhận: 40 nhân viên không đủ lực cho MDE 5 điểm khi chia theo cụm, nên chọn MDE 6 điểm và công khai power 0,64 nếu tác động thật là 5 điểm. Rollback: cờ tắt, hiệu lực trong 30 phút, yêu cầu đang mở chuyển sang nhân viên.</aside>
+</section>

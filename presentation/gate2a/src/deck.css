@@ -1,0 +1,165 @@
+:root {
+  --ink: #14213D;
+  --paper: #F6F4EE;
+  --paper2: #ECE8DD;
+  --soft: #4A5568;
+  --accent: #B5541A;
+  --accent-big: #D9692A;
+  --blue: #2F5F9E;
+  --on-dark: #F6F4EE;
+  --on-dark-soft: #BCC6D8;
+  --line: #D3CDBE;
+}
+
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  color: var(--ink);
+}
+
+section {
+  padding: 128px;
+  background: var(--paper);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  box-sizing: border-box;
+}
+
+section.alt { background: var(--paper2); }
+
+section.dark {
+  background: var(--ink);
+  color: var(--on-dark);
+}
+
+h1, h2, h3 {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  margin: 0;
+}
+
+h1 { font-size: 104px; font-weight: 800; line-height: 1.05; }
+h2 { font-size: 64px; font-weight: 700; line-height: 1.1; }
+h3 { font-size: 36px; font-weight: 700; line-height: 1.2; }
+
+p { font-size: 32px; line-height: 1.4; margin: 0; }
+
+.eyebrow {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.dark .eyebrow { color: #F0A46E; }
+
+.head { display: flex; flex-direction: column; gap: 16px; }
+
+.lead { font-size: 32px; color: var(--soft); }
+.dark .lead { color: var(--on-dark-soft); }
+
+.small { font-size: 24px; color: var(--soft); }
+.dark .small { color: var(--on-dark-soft); }
+
+.tag {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Cover */
+.cover { justify-content: space-between; }
+.cover h1 { color: var(--on-dark); max-width: 1500px; }
+.cover .meta { display: flex; gap: 64px; }
+.cover .meta p { font-size: 28px; color: var(--on-dark-soft); }
+.cover .meta b { color: var(--on-dark); }
+
+/* Big number statement */
+.bignum {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  font-size: 220px;
+  font-weight: 800;
+  line-height: 1;
+  color: #F0A46E;
+}
+
+.stat-row { display: flex; gap: 48px; }
+.stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 36px 40px;
+  border-radius: 20px;
+  background: #FBFAF6;
+  border: 2px solid var(--line);
+}
+.alt .stat { background: #F6F4EE; }
+.dark .stat { background: #1D2D50; border-color: #2C3F66; }
+.stat .num {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.dark .stat .num { color: #F0A46E; }
+.stat .num.hot { color: var(--accent); }
+.stat .lbl { font-size: 28px; line-height: 1.35; color: var(--soft); }
+.dark .stat .lbl { color: var(--on-dark-soft); }
+
+/* Bars */
+.bars { display: flex; flex-direction: column; gap: 22px; }
+.bar-row { display: flex; align-items: center; gap: 28px; }
+.bar-label { width: 460px; font-size: 28px; font-weight: 500; }
+.bar-track { flex: 1; display: flex; align-items: center; gap: 20px; }
+.bar { height: 48px; border-radius: 8px; background: var(--blue); }
+.bar.hot { background: var(--accent-big); }
+.bar.muted { background: #A9B4C6; }
+.bar-val { font-size: 28px; font-weight: 700; white-space: nowrap; }
+
+/* Tables */
+table { font-size: 28px; color: var(--ink); width: 100%; }
+th { text-align: left; font-weight: 700; }
+
+/* Cards */
+.cards { display: flex; gap: 32px; }
+.card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 36px;
+  border-radius: 20px;
+  background: #FBFAF6;
+  border: 2px solid var(--line);
+}
+.alt .card { background: #F6F4EE; }
+.card .body { font-size: 26px; line-height: 1.45; color: var(--soft); }
+.card.warn { border-color: var(--accent); }
+
+.qnum {
+  font-family: 'Be Vietnam Pro', Arial, sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--accent-big);
+  line-height: 1;
+}
+
+.note {
+  font-size: 24px;
+  color: var(--soft);
+  border-left: 6px solid var(--accent);
+  padding-left: 24px;
+}
+
+.spacer { flex: 1; }
+
+/* Motion */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.in { animation: rise 500ms ease-out both; animation-delay: calc(var(--i, 0) * 120ms); }
