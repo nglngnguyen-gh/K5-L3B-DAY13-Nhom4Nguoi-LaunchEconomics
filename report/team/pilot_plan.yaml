@@ -1,51 +1,52 @@
 # Lab 13 · Nhiệm vụ D · Kế hoạch pilot trợ lý hoàn phí LogiX-VN (Gate 2a)
-# Điền mọi chỗ có dấu hỏi. Khi nộp, ngoài các dòng chú thích không còn dấu hỏi nào.
-# Kiểm tra đọc được: python -c "import yaml; yaml.safe_load(open('../report/team/pilot_plan.yaml'))"
-#
-# D1 · Cỡ mẫu (baseline 0,70; mục tiêu +5 điểm; alpha 0,05; power 0,8; ICC 0,02)
-#   a) Chia theo yêu cầu:
-#   b) Theo nhân viên, m = 75:
-#   c) 20 nhân viên mỗi nhóm:
-#   d) 6 depot mỗi nhóm:
-#   e) Mức chênh 6 điểm (859 mỗi nhóm), 20 nhân viên mỗi nhóm:
-#
-# D2 · Năm câu kiểm tra "tách được tác động" với cách chia đã chọn (mỗi câu một dòng):
-#   1. Đối chứng chạy cùng thời gian:
-#   2. Chia ngẫu nhiên hay do người chọn:
-#   3. Ảnh hưởng gián tiếp và cách giảm:
-#   4. Chỉ số chính, ngưỡng, ngày quyết định đã viết trước:
-#   5. Ít nhất 20 cụm mỗi nhóm:
-#
-# Đánh đổi đã chấp nhận (nếu cách chia chưa đạt cả hai điều kiện):
-#
-# Tỉ lệ mo_lai_trong_7_ngay hiện tại và ngưỡng an toàn đã chọn:
+# D1 · Cỡ mẫu (baseline 0,70; alpha 0,05; power 0,80; ICC 0,02)
+#   a) Chia theo yêu cầu: n = 1.251 yêu cầu mỗi nhóm.
+#   b) Theo nhân viên, m = 75: DE = 2,48; 3.103 yêu cầu/nhóm, cần 42 nhân viên/nhóm (84 > 40), không đủ.
+#   c) 20 nhân viên/nhóm: n hiệu dụng tối đa < 20/0,02 = 1.000, thấp hơn 1.251, không đạt mức chênh 5 điểm.
+#   d) 6 depot/nhóm: n hiệu dụng tối đa < 6/0,02 = 300, không đạt.
+#   e) Chọn mức chênh 6 điểm: n = 859/nhóm; với 20 nhân viên/nhóm cần m >= 299 yêu cầu/nhân viên,
+#      DE = 6,96 và n hiệu dụng = 859,2. Nếu tác động thật chỉ 5 điểm, power khoảng 0,64.
+# D2 · Năm câu kiểm tra tách được tác động:
+#   1. Có 20 nhân viên đối chứng chạy cùng tuần trong các depot tham gia; trợ lý bị tắt cho nhóm này.
+#   2. Bốc thăm bằng code với seed lưu trước, phân tầng theo depot; mỗi nhân viên chỉ thuộc một nhánh.
+#   3. Có nguy cơ chia sẻ cách làm giữa nhân viên cùng depot; giới hạn quyền trợ lý theo staff_id và ghi log lượt mở.
+#   4. Chốt chỉ số chính, ngưỡng, luật dừng và ngày quyết định trước khi bắt đầu; chỉ xem an toàn giữa kỳ.
+#   5. Đạt 20 cụm nhân viên mỗi nhóm; chấp nhận MDE 6 điểm và công khai power 0,64 nếu tác động thật là 5 điểm.
+# Đánh đổi: 40 nhân viên không đủ lực thống kê cho MDE 5 điểm khi chia theo cụm.
+# Chọn 20 nhân viên mỗi nhóm, cần tối thiểu 299 yêu cầu/nhân viên để có lực cho MDE 6 điểm.
+# Tỉ lệ mở lại 7 ngày hiện tại: 4,25% toàn mẫu (51/1.200); 3,97% trong phạm vi pilot (39/982), đều simulated.
+# Ngưỡng an toàn: chênh lệch nhóm trợ lý so với đối chứng >= 2 điểm phần trăm hoặc trần tuyệt đối 6%.
 
 pilot:
-  owner: "?"                      # một người có tên vai trò, không ghi "cả đội"
-  scope: "?"                      # loại yêu cầu nào, depot nào; dựa vào kết quả A3
+  owner: "Giám đốc vận hành LogiX-VN"
+  scope: "Tuyển 40 nhân viên tại 12 depot, phân tầng theo depot và chia 20/20; chỉ pilot noi_dia và hang_nang (2.696 đ và 8.221 đ/việc so với 12.000 đ, simulated); loại quoc_te (22.515 đ/việc, 1,88x) và doi_tac (10.215 đ/việc, 0,85x, điều khoản riêng)"
   assignment:
-    unit: "?"                     # request | staff | depot
+    unit: "staff"
     control_share: 0.5
     randomized: true
-  rollout: [0.10, 0.25, 0.50]     # mỗi bước một tuần
+  rollout: [0.10, 0.25, 0.50] # Bật dần cho 4, 10, 20 nhân viên can thiệp; giữ 20 đối chứng đồng thời. Đo chỉ số chính ở nấc 0.50 và sau đủ 7 ngày theo dõi.
   primary_metric:
     name: dong_trong_24h_khong_mo_lai_7_ngay
     baseline: 0.70
-    mde: 0.05
+    mde: 0.06
     alpha: 0.05
     power: 0.80
-    n_per_arm: "?"
-    design_effect: "?"            # 1 nếu chia theo yêu cầu
-    clusters_per_arm: "?"         # để trống nếu chia theo yêu cầu
+    n_per_arm: 859
+    design_effect: 6.96
+    clusters_per_arm: 20
   identifiability:
-    concurrent_control: "?"
-    spillover_risk: "?"
-    predeclared: "?"
+    concurrent_control: "Có; 20 nhân viên đối chứng làm cùng tuần tại các depot tham gia; phân tầng theo depot và trợ lý không khả dụng cho tài khoản đối chứng."
+    spillover_risk: "Có; nhân viên cùng depot có thể chia sẻ cách làm. Phân tầng ngẫu nhiên theo depot, giới hạn quyền agent theo staff_id và ghi log agent_opened."
+    predeclared: "Có; chỉ số chính, MDE, ngưỡng an toàn/chi phí/sử dụng, quy tắc dừng và ngày quyết định được chốt trước khi chạy."
   stop_rules:
-    - "NẾU ? TRONG ? THÌ ? KHÔNG THÌ ?"
-    - "NẾU ? TRONG ? THÌ ? KHÔNG THÌ ?"
-    - "NẾU ? TRONG ? THÌ ? KHÔNG THÌ ?"
-  interim_looks: "chỉ kiểm tra chỉ số an toàn"
-  rollback: "?"                   # ai bấm, mất bao lâu, khách được phục vụ bằng gì
-  decision_date: "?"
-  simulated_inputs: ["?"]         # liệt kê mọi con số giả lập đã dùng
+    - "NẾU tỷ lệ mở lại 7 ngày của nhóm trợ lý cao hơn đối chứng ít nhất 2 điểm phần trăm hoặc vượt trần 6% tại hai lần kiểm tra an toàn liên tiếp, HOẶC có ít nhất 1 ca hoàn trùng mỗi ngày TRONG 3 ngày liên tiếp, THÌ Giám đốc vận hành tắt trợ lý trong 30 phút KHÔNG THÌ không chuyển sang nấc rollout kế tiếp"
+    - "NẾU chi phí mỗi việc thành công của phạm vi pilot vượt 8.000 đ TRONG 2 tuần liên tiếp THÌ PM trợ lý hoàn phí thu hẹp phạm vi về noi_dia và giới hạn tối đa 2 lần chạy KHÔNG THÌ giữ nấc rollout hiện tại, chỉ mở rộng khi đủ mẫu và các cổng an toàn đạt"
+    - "NẾU tỷ lệ bỏ qua gợi ý (sua hoặc bo / yêu cầu được xem lại) vượt 40% TRONG 1 tuần THÌ Trưởng nhóm CSKH phỏng vấn 5 nhân viên trong 3 ngày KHÔNG THÌ không chuyển sang nấc rollout kế tiếp"
+  interim_looks: "Kiểm tra an toàn hằng ngày; chỉ đánh giá tỷ lệ mở lại trên yêu cầu đã đủ cửa sổ theo dõi 7 ngày, không xem sớm hiệu quả chỉ số chính."
+  rollback: "Giám đốc vận hành dùng cờ tắt; hiệu lực trong 30 phút. Yêu cầu đang mở được chuyển sang luồng nhân viên tự xử lý."
+  decision_date: "2027-01-05"
+  simulated_inputs:
+    - "Mẫu CSV [simulated] có 20 nhân viên tại 6 depot; cần tuyển đủ 40 nhân viên từ 12 depot để có 20 cụm mỗi nhánh."
+    - "Chi phí A3 [simulated]: noi_dia 2.696 đ/việc, hang_nang 8.221 đ/việc, quoc_te 22.515 đ/việc, doi_tac 10.215 đ/việc; so sánh nhân viên 12.000 đ."
+    - "Mở lại trong 7 ngày [simulated]: toàn mẫu 51/1.200 = 4,25%; phạm vi noi_dia + hang_nang 39/982 = 3,97%."
+    - "Bỏ qua gợi ý [simulated]: 48/177 = 27,12%."
